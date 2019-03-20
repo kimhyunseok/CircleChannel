@@ -53,13 +53,14 @@
 	
 	<select
 		id="Circle_Cnt"
-		parameterType="String"
+		parameterType="Hashmap"
 		resultType="int">
 		SELECT 
 		count(a.circle_No)as circle_No 
 		FROM tb_circle  a
 		INNER JOIN tb_file b 
 		ON a.file_no = b.file_no
+		WHERE circle_Kind = concat(#{Kind1},','#{Kind2})
 	</select>
 	<select
 		id="Circle_List"
@@ -106,7 +107,8 @@
 		FROM tb_circle a 
 		INNER JOIN tb_file b 
 		ON a.file_no = b.file_no
-		ORDER BY circle_No ASC LIMIT ${start}, 12  WHERE circle_Kind =
+		WHERE circle_Kind = concat(#{Kind1},','#{Kind2})
+		ORDER BY circle_No ASC LIMIT ${start}, 12  
         ) A
 		
 	</select>

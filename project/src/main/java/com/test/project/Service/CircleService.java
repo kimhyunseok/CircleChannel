@@ -32,9 +32,9 @@ public class CircleService implements CircleDao {
   }
   
   @Override
-  public int Circle_Cnt() {
+  public int Circle_Cnt(HashMap<String, Object> map) {
     // TODO Auto-generated method stub
-    return mapper.Circle_Cnt();
+    return mapper.Circle_Cnt(map);
   }
   
   @Override

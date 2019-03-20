@@ -3,14 +3,14 @@
 <div class="container-fluid">
 	<footer class="footer">
 		<div class="footerHeader"></div>
-		<div class="container-fluid" style="background-color: #009999; padding: 30px">
+		<div class="container" style="background-color: #009999; padding: 30px">
 			<div class="row">
 
 				<!--footer area -->
 
 				<div class="col-md-4">
-					<h3>»çÀÌÆ®¼Ò°³</h3>
-					<p>µ¿¾Æ¸®Ã¤³ÎÀº »ç¿ëÀÚ¿¡°Ô Á¤±âÀûÀ¸·Î Ãë¹Ì»ýÈ°À» Áñ±â°í »ç¶÷µé°ú ¾î¿ï¸®·Á´Â ¸ñÀûÀÇ µ¿È£È¸ È°µ¿¿¡ »ý°¢º¸´Ù ¸¹Àº »ç¶÷ À§ÇØ¼­ µ¿È£È¸³ª ¼Ò±Ô¸ð ¸ðÀÓÀ» µî·ÏÇØ ±¸¼º¿øÀ» ¸ðÁýÇÑ´Ù´Â ±ÛÀ» ¿Ã¸®¸é °ü½É ÀÖ´Â »ç¶÷µéÀÌ Âü¿©ÇØ ¿ÀÇÁ¶óÀÎ ¸ðÀÓÀ» ÀÌ·ç¾îÁö°Ô ÇÏ´Â »çÀÌÆ®ÀÔ´Ï´Ù</p>
+					<h3>ì‚¬ì´íŠ¸ì†Œê°œ</h3>
+					<p>ë™ì•„ë¦¬ì±„ë„ì€ ì‚¬ìš©ìžì—ê²Œ ì •ê¸°ì ìœ¼ë¡œ ì·¨ë¯¸ìƒí™œì„ ì¦ê¸°ê³  ì‚¬ëžŒë“¤ê³¼ ì–´ìš¸ë¦¬ë ¤ëŠ” ëª©ì ì˜ ë™í˜¸íšŒ í™œë™ì— ìƒê°ë³´ë‹¤ ë§Žì€ ì‚¬ëžŒ ìœ„í•´ì„œ ë™í˜¸íšŒë‚˜ ì†Œê·œëª¨ ëª¨ìž„ì„ ë“±ë¡í•´ êµ¬ì„±ì›ì„ ëª¨ì§‘í•œë‹¤ëŠ” ê¸€ì„ ì˜¬ë¦¬ë©´ ê´€ì‹¬ ìžˆëŠ” ì‚¬ëžŒë“¤ì´ ì°¸ì—¬í•´ ì˜¤í”„ë¼ì¸ ëª¨ìž„ì„ ì´ë£¨ì–´ì§€ê²Œ í•˜ëŠ” ì‚¬ì´íŠ¸ìž…ë‹ˆë‹¤</p>
 				</div>
 
 
@@ -24,7 +24,7 @@
 						<li>E-mail : lia0417@naver.com</li>
 
 					</ul>
-					<p>ÀúÈñ µ¿¾Æ¸®Ã¤³ÎÀº »ç¿ëÀÚ¿¡°Ô ¿øÇÒÇÑ µ¿¾Æ¸®Á¤º¸¸¦ Á¦°øÇÏµµ·Ï ³ë·ÂÇÏ°í ÀÖ½À´Ï´Ù</p>
+					<p>ì €í¬ ë™ì•„ë¦¬ì±„ë„ì€ ì‚¬ìš©ìžì—ê²Œ ì›í• í•œ ë™ì•„ë¦¬ì •ë³´ë¥¼ ì œê³µí•˜ë„ë¡ ë…¸ë ¥í•˜ê³  ìžˆìŠµë‹ˆë‹¤</p>
 					<ul class="sm">
 						<li>
 							<a href="#">
@@ -54,8 +54,8 @@
   var mapOptions = {
   center : new naver.maps.LatLng(37.3595704, 127.105399),
   zoom : 20,
-  zoomControl : true, //ÁÜ ÄÁÆ®·ÑÀÇ Ç¥½Ã ¿©ºÎ
-  zoomControlOptions : { //ÁÜ ÄÁÆ®·ÑÀÇ ¿É¼Ç
+  zoomControl : true, //ì¤Œ ì»¨íŠ¸ë¡¤ì˜ í‘œì‹œ ì—¬ë¶€
+  zoomControlOptions : { //ì¤Œ ì»¨íŠ¸ë¡¤ì˜ ì˜µì…˜
     position : naver.maps.Position.TOP_RIGHT
   }
   };

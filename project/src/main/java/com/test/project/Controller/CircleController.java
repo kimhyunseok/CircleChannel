@@ -89,7 +89,11 @@ public class CircleController {
     model.addObject("menu", menu);
     model.addObject("Smenu", Smenu);
     
-    int listCnt = cService.Circle_Cnt();
+    String kind1 = req.getParameter("Kind1");
+    String kind2 = req.getParameter("Kind2");
+    map.put("Kind1", kind1);
+    map.put("Kind2", kind2);
+    int listCnt = cService.Circle_Cnt(map);
     // 전체리스트 개수
     int curNum = Integer.parseInt(req.getParameter("pageNum"));
     // 현재 페이지

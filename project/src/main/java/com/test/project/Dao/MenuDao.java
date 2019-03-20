@@ -18,4 +18,5 @@ public interface MenuDao {
   ArrayList<MenuBean> menu_List();
   
   ArrayList<MenuBean> menu_SubList();
+  
 }

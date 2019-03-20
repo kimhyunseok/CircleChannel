@@ -12,7 +12,7 @@ import com.test.project.Dto.CircleReplyBean;
 public interface CircleDao {
   public int Circle_insert(CircleBean bean);
   
-  public int Circle_Cnt();
+  public int Circle_Cnt(HashMap<String, Object> map);
   
   public void Circle_del(HashMap<String, Object> map);
   
