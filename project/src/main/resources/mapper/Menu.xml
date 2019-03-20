@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.MenuDao">
+  <select id="menu_List" resultType="com.test.project.Dto.MenuBean">
+    SELECT 
+      `menu_no`,
+      `menu_nm`,
+      `menu_code1`,
+      `menu_code2`,
+      `menu_href`,
+       `menu_icon` 
+   
+  FROM `tb_menu_table`
+  WHERE menu_code2=0
+  </select>
+  <select id="menu_SubList" resultType="com.test.project.Dto.MenuBean">
+SELECT 
+    `menu_no`,
+    `menu_nm`,
+    `menu_code1`,
+    `menu_code2`,
+    `menu_href`
+FROM `tb_menu_table`
+WHERE menu_code2 !=0
+  </select>
+</mapper>

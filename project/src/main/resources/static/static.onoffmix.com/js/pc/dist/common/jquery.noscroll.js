@@ -1,0 +1,1 @@
+!function(l){l.fn.noScroll=function(e){l.extend({},e);l(this).on("DOMMouseScroll mousewheel",function(e){var l=e.currentTarget,n=l.scrollTop/(l.scrollHeight-l.clientHeight);if(0<=("DOMMouseScroll"===e.type?-40*e.originalEvent.detail:e.originalEvent.wheelDelta)){if(n<=0)return!1}else if(1<=n)return!1})},l.fn.noscroll=l.fn.noScroll}(jQuery);

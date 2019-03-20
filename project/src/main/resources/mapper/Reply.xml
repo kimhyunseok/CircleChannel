@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.BReplyDao">
+
+	<insert
+		id="Rereply_Insert"
+		parameterType="Hashmap">
+		INSERT INTO ${db_table}
+		(
+		`board_no`,
+		`reply_content`,
+		`reply_id`,
+		`reply_in_date`,
+		`reply_level`,
+		`reply_re_no`
+		)
+		VALUES
+		(
+		#{board_no},
+		#{reply_content},
+		'관리자',
+		NOW(),
+		#{reply_level},
+		#{reply_no}
+		)
+		ON DUPLICATE KEY UPDATE reply_no=#{reply_no}, reply_content=#{reply_content};
+	</insert>
+	<insert
+		id="reply_Insert"
+		parameterType="Hashmap">
+		INSERT INTO ${db_table}
+		(
+		`board_no`,
+		`reply_content`,
+		`reply_id`,
+		`reply_in_date`,
+		`reply_re_no`
+		)
+		VALUES
+		(
+		#{board_no},
+		#{board_content},
+		'관리자',
+		NOW(),
+		1
+		)
+	</insert>
+	<select
+		id="reply_List"
+		parameterType="Hashmap"
+		resultType="com.test.project.Dto.BRelplyBean">
+		SELECT `reply_no`,
+		`board_no`,
+		`reply_content`,
+		`reply_id`,
+		`reply_level`,
+		`borad_id`,
+		`reply_in_date`,
+		`reply_del_date`,
+		`reply_upt_date`
+		FROM ${db_table}
+		WHERE BOARD_NO=${board_No}
+		ORDER BY REPLY_RE_NO ASC , REPLY_NO ;
+
+	</select>
+
+	<select
+		id="reply_max"
+		parameterType="Hashmap"
+		resultType="int">
+		SELECT MAX(reply_level) reply_no
+		FROM ${db_table}
+		WHERE
+		board_no=${board_no} AND reply_re_no=${reply_no}
+	</select>
+	<update id="reply_upt" parameterType="Hashmap">
+		UPDATE ${db_table}
+		SET
+		`reply_content` = #{reply_content}
+		WHERE `reply_no` = #{reply_no};
+	</update>
+	<delete id="reply_del" parameterType="Hashmap">
+		DELETE FROM ${db_table}
+		WHERE
+		<choose>
+			<when test="del_type.equals('All')">
+				`reply_re_no`= #{reply_no}
+			</when>
+			<otherwise>
+				`reply_no` = #{reply_no}
+			</otherwise>
+		</choose>
+	</delete>
+</mapper>

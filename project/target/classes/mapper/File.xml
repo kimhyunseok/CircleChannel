@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.FileDao">
+
+	<insert
+		id="file_Insert"
+		parameterType="com.test.project.Dto.FileBean"
+		useGeneratedKeys="true"
+		keyProperty="file_no" >
+		INSERT INTO tb_file
+		(
+		`file_name`,
+		`file_o_name`,
+		`file_url`,
+		`file_size`
+		)
+		VALUES
+		(
+		#{file_name},
+		#{file_o_name},
+		#{file_url},
+		#{file_size}
+		);
+	</insert>
+	<select
+		id="file_Select"
+		parameterType="hashmap" resultType="com.test.project.Dto.FileBean">
+		SELECT `file_no`,
+			`file_name`,
+			`file_o_name`,
+			`file_url`,
+			`file_size`
+		FROM `tb_file` 
+		WHERE file_no=${value}
+	</select>
+	
+	<update
+		id="file_Update"
+		parameterType="com.test.project.Dto.FileBean">
+		
+		
+		UPDATE `tb_file` SET 
+			
+			`file_name` =${file_name},
+			`file_o_name`=${file_o_name},
+			`file_url`=${file_url},
+			`file_size`=${file_size}
+		FROM `tb_file` 
+		WHERE file_no=${board_fileNo}
+	</update>
+
+</mapper>

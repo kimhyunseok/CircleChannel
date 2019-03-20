@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.CircleGroupDao">
+	
+	<insert id="CircleGroup_ins" 
+	        parameterType="Hashmap"
+	       >
+		INSERT INTO tb_circle_group
+		(
+            `circle_No`,
+            `c_groupTitle`,
+            `c_groupCnt`,
+            `c_groupPay`,
+            `c_groupin_cnt`,
+            `c_group_PFchk`,
+            `c_group_in_date`
+      
+		)
+		VALUES
+      <foreach collection="list" item="item" separator=" , ">
+		(
+			#{item.circle_no},    
+			#{item.c_groupTitle},          
+			#{item.c_groupCnt},      
+            
+			#{item.c_groupPay},         
+           
+          
+			0,
+            #{item.c_group_PFchk},   
+           now()
+    	)
+  	</foreach>
+    
+	</insert>
+	<select id="CircleGroup_List"   
+  parameterType="hashmap"
+  resultType="com.test.project.Dto.CircleGroupBean"
+  >
+     SELECT 
+      `c_group_No`,
+      `circle_No`,
+      `c_groupTitle`,
+      `c_groupCnt`,
+      `c_groupPay`,
+      `c_groupin_cnt`,
+      `c_group_PFchk`,
+      `c_group_in_date`,
+      `c_group_upt_date`,
+      `c_group_del_date`
+    FROM `tb_circle_group`
+    WHERE
+    CIRCLE_NO = ${pageNum}
+     
+  </select>
+	
+</mapper>

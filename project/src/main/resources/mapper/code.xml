@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.CodeDao">
+  <select id="Code_List" resultType="com.test.project.Dto.CodeBean">
+  SELECT  `code_No`,
+          `code_Nm`,
+          `code_Val_1`,
+          `code_Val_2`,
+          `code_Kind`,
+          `code_in_date`,
+          `code_del_date`,
+          `code_upt_date`
+  FROM 
+  `tb_code`
+  WHERE code_Kind='1' order by code_Val_1 ,code_Val_2;
+  ;
+  </select>
+</mapper>

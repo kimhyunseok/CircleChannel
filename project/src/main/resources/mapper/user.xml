@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.UserDao">
+	<select id="UserCnt" parameterType="String" resultType="int">
+		SELECT
+			COUNT(user_id)
+		FROM TB_USER
+			WHERE USER_ID LIKE #{param}
+	</select>
+	<select id="LoginChk" parameterType="com.test.project.Dto.UserBean" resultType="int">
+		SELECT
+			COUNT(user_id)
+		FROM
+			TB_USER
+		WHERE
+		user_id = #{user_id} AND user_pw =#{user_pw}
+	</select>
+	<insert id="UserJoin" parameterType="com.test.project.Dto.UserBean">
+		INSERT INTO TB_USER
+		(
+			`USER_ID`,
+			`USER_NM`,
+			`USER_PW`,
+			`USER_EMAIL_1`,
+			`USER_EMAIL_2`,
+            `USER_PHONE`,
+            `USER_ADDR1`,
+            `USER_ADDR2`,  
+            `USER_POST`       
+		)
+		VALUES
+		(
+			#{user_id},
+			#{user_nm},
+			#{user_pw},
+			#{user_email_1},
+			#{user_email_2},
+            #{user_phone},
+            #{user_addr1},
+            #{user_addr2},
+            #{user_post} 
+		);
+	</insert>
+	<select id="SelectUserInfo" parameterType="String" resultType="com.test.project.Dto.UserBean">
+		SELECT
+			user_id,
+			user_nm,
+			user_pw,
+			user_email_1,
+			user_email_2,
+            user_addr1,
+            user_addr2,
+            user_post, 
+            user_phone
+		FROM
+			TB_USER
+		WHERE
+			user_id = #{param}
+	</select>
+	<update id="UserUpdate" parameterType="com.test.project.Dto.UserBean" >
+		UPDATE tb_user
+		SET
+			`user_id`	   = #{user_id},
+			`user_pw`      = #{user_pw},
+			`user_email_1` = #{user_email_1},
+			`user_email_2` = #{user_email_2},
+            `user_phone`   = #{user_phone},
+            `user_addr1`   = #{user_addr1},
+            `user_addr2`   = #{user_addr2},
+            `user_post`    = #{user_post}
+		WHERE `user_id` = #{user_id} ;
+	</update>
+</mapper>
