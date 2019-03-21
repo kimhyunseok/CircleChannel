@@ -22,10 +22,7 @@
 			#{item.circle_no},    
 			#{item.c_groupTitle},          
 			#{item.c_groupCnt},      
-            
 			#{item.c_groupPay},         
-           
-          
 			0,
             #{item.c_group_PFchk},   
            now()
@@ -38,17 +35,17 @@
   resultType="com.test.project.Dto.CircleGroupBean"
   >
      SELECT 
-      `c_group_No`,
-      `circle_No`,
+      A.c_groupNo,
+      A.circle_No,
       `c_groupTitle`,
       `c_groupCnt`,
       `c_groupPay`,
-      `c_groupin_cnt`,
+      `c_groupCnt`-(select COUNT(c_groupno) from tb_circlejoin where c_groupNo=A.c_groupNo AND circle_no=A.circle_No) as `c_groupin_cnt`,
       `c_group_PFchk`,
       `c_group_in_date`,
       `c_group_upt_date`,
       `c_group_del_date`
-    FROM `tb_circle_group`
+    FROM `tb_circle_group`A
     WHERE
     CIRCLE_NO = ${pageNum}
      

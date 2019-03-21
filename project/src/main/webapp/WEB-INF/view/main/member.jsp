@@ -74,7 +74,7 @@
 														</div>
 													</div>
 												</div>
-
+	
 												<div class="form-group">
 													<label>주소</label>
 													<div class="form-group form-inline">
@@ -100,7 +100,7 @@
 											</form>
 										</c:when>
 										<c:otherwise>
-											<form id="join" method="post" action="http://localhost:8080/UserUpdate">
+											<form id="Update" method="post" action="http://localhost:8080/UserUpdate">
 												<div class="form-group">
 													<label>아이디 </label><span class="regForm text-danger">*</span> 
 													<input name="user_id" type="text" id="user_id" class="form-control " value="${user_info.user_id}" placeholder="" readonly>
@@ -116,6 +116,9 @@
 												<div class="form-group">
 													<label>새로운 패스워드 확인</label><span class="regForm text-danger">*</span> 
 													<input name="user_pw" type="password" id="user_pw" value="" class="form-control pwd2">
+												</div>
+												<div class="form-group">
+													<font name="check"><br /></font>
 												</div>
 												<div class="form-row">
 													<div class="col-sm-12 form-group">
@@ -147,9 +150,6 @@
 													<div class=" form-inline">
 														<button type="button" class='form-control ' id="search">찾기</button>
 													</div>
-												</div>
-												<div class="form-group">
-													<font name="check"><br /></font>
 												</div>
 
 												<div class="form-row  justify-content-md-center ">
@@ -259,7 +259,7 @@
       }
     });
     /* 중복확인 end// */
-
+   /* 비번체크 시작// */
     $('.pwd1').keyup(function() {
       $('font[name=check]').html('<br>');
     });
@@ -277,6 +277,7 @@
         pwdchk = true;
       }
     });
+    
     /* 비번체크 end// */
     $("#JoinBtn").click(function() {
       if (idchk == false) {
@@ -302,6 +303,8 @@
       $("#join").submit();
 
     });
+    
+    
     $(".update").click(function() {
       if ($("#user_pw").val() == $("#user_b_pw").val()) {
         alert("기존비밀번호와 같습니다.");
@@ -315,8 +318,8 @@
         alert("이미 존재하는 아이디입니다");
         return false;
       }
-      $('#selectMail').attr('disabled', false);
-      //$("#join").submit();
+      $('#selectMail').attr('readonly', false);
+      $("#Update").submit();
       
     });
     

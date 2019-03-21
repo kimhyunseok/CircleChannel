@@ -19,4 +19,5 @@ public class MenuBean {
   private String menu_code2;
   private String menu_icon;
   private String menu_href;
+  private String menu_title;
 }

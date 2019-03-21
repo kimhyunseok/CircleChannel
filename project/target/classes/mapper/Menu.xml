@@ -10,7 +10,7 @@
       `menu_href`,
        `menu_icon` 
    
-  FROM `tb_menu_table`
+  FROM `tb_menu`
   WHERE menu_code2=0
   </select>
   <select id="menu_SubList" resultType="com.test.project.Dto.MenuBean">
@@ -20,7 +20,14 @@
 	    `menu_code1`,
 	    `menu_code2`,
 	     concat(menu_href,'&amp;Kind1=',menu_code1,'&amp;Kind2=',menu_code2) menu_href
-	FROM `tb_menu_table`
+	   
+	FROM `tb_menu`
 	WHERE menu_code2 !=0
+  </select>
+   <select id="menu_Title" resultType="String">
+	SELECT 
+	     concat(fn_menuTitle(#{Kind1}),'/',menu_nm,'/') menu_title
+	FROM `tb_menu`
+	WHERE menu_code1 = #{Kind1} and menu_code2 = #{Kind2} 
   </select>
 </mapper>

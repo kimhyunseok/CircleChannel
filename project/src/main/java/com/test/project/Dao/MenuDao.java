@@ -1,6 +1,7 @@
 package com.test.project.Dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,4 +20,5 @@ public interface MenuDao {
   
   ArrayList<MenuBean> menu_SubList();
   
+  String menu_Title(HashMap<String, Object> map);
 }

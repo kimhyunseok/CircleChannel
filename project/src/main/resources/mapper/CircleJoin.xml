@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.CircleJoinDao">
+	
+	
+	<select id="CircleJoin_Chk"   
+  parameterType="Hashmap"
+  resultType="int"
+  >
+    SELECT
+	count(c_groupno)
+	FROM
+		tb_circlejoin
+	WHERE
+		
+		circle_no = #{circle_No}
+		and user_id =#{user_id}
+		;
+     
+  </select>
+	<insert id="CircleJoin_Apply" 
+	        parameterType="com.test.project.Dto.CircleJoinBean">
+	 INSERT INTO 
+	 `tb_circlejoin`
+	 (
+	`circle_no`,
+	`c_groupno`,
+	`user_id`,
+	`circleJoin_in_date`
+	)
+	VALUES
+	(
+	#{circle_No},
+	#{c_groupNo},
+	#{user_id},
+	now()
+	);
+	        
+	</insert>
+</mapper>

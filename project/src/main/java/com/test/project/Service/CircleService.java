@@ -74,4 +74,10 @@ public class CircleService implements CircleDao {
     mapper.Circle_Reply_Ins(map);
   }
   
+  @Override
+  public ArrayList<CircleBean> MyCircleList(HashMap<String, Object> map) {
+    // TODO Auto-generated method stub
+    return mapper.MyCircleList(map);
+  }
+  
 }

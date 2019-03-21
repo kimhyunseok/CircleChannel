@@ -25,4 +25,7 @@ public interface CircleDao {
   public void Circle_Reply_Ins(HashMap<String, Object> map);
   
   public ArrayList<CircleReplyBean> Circle_ReplyView(HashMap<String, Object> map);
+  
+  public ArrayList<CircleBean> MyCircleList(HashMap<String, Object> map);
+  
 }

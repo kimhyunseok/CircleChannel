@@ -120,6 +120,7 @@ body {
 	width: 100%;
 	font-weight: lighter;
 	color: white;
+	background-color: #009999;
 }
 
 .footerHeader {
@@ -193,3 +194,6 @@ h5 {
 }
 
    
+   .nav-item:active{
+   background-color: gray;
+   }

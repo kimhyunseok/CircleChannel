@@ -47,7 +47,7 @@
 							<div class="list-group">
 								<a href="http://localhost:8080/memberUpdate" class="list-group-item list-group-item-action">정보수정</a>
 								<a href="http://localhost:8080/circle/circleInsert" class="list-group-item list-group-item-action">동아리등록</a>
-								<a href="http://localhost:8080/circle/circleInsert" class="list-group-item list-group-item-action">내 동아리목록</a>
+								<a href="http://localhost:8080/main/Mycircle?pageNum=1" class="list-group-item list-group-item-action">내 동아리목록</a>
 							</div>
 						</div>
 					</li>
@@ -125,7 +125,9 @@
       bgColor : "#dcdcdc" //Hex, RGB or RGBA colors
       });
     }
+    
 
+    
     $('[data-toggle="tooltip"]').tooltip();
     $(window).on('load', loading());
   });

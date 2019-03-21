@@ -34,12 +34,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.test.project.CommonMathod.CFileUploadMathod;
 import com.test.project.Dto.CircleBean;
 import com.test.project.Dto.CircleGroupBean;
+import com.test.project.Dto.CircleJoinBean;
 import com.test.project.Dto.CircleReplyBean;
 import com.test.project.Dto.CodeBean;
 import com.test.project.Dto.FileBean;
 import com.test.project.Dto.MenuBean;
 import com.test.project.Dto.pagingBean;
 import com.test.project.Service.CircleGroupService;
+import com.test.project.Service.CircleJoinService;
 import com.test.project.Service.CircleService;
 import com.test.project.Service.CodeService;
 import com.test.project.Service.FileService;
@@ -61,6 +63,8 @@ public class CircleController {
   private FileService service;
   @Autowired
   private CircleService cService;
+  @Autowired
+  private CircleJoinService CJService;
   @Autowired
   CircleGroupService CGService;
   @Autowired
@@ -103,7 +107,8 @@ public class CircleController {
     model.addObject("list", list);
     model.addObject("pagination", test);
     model.setViewName("circle/circleList");
-    model.addObject("title", "동아리목록");
+    String bean = MService.menu_Title(map);
+    model.addObject("title", bean + "목록");
     logger.info("동아리리스트-end");
     return model;
   }
@@ -154,6 +159,8 @@ public class CircleController {
     cService.Circle_insert(bean);
     int circle_no = bean.getCircle_No();
     logger.info(cgbean.toString());
+    String[] kind1 = bean.getCircle_Kind().split(",");
+    
     String c_group1[] = cgbean.getC_groupTitle().split(",");
     String c_group2[] = cgbean.getC_groupCnt().split(",");
     String c_group3[] = cgbean.getC_groupPay().split(",");
@@ -186,10 +193,11 @@ public class CircleController {
     logger.warn("Just testing a log message with priority set to WARN");
     
     try {
+      String url = "&Kind1=" + kind1[0] + "&Kind2=" + kind1[1];
       response.setContentType("text/html; charset=UTF-8");
       PrintWriter out = response.getWriter();
       out.println("<script>alert('동아리를 등록되었습니다.');</script>");
-      out.println("<script>location.replace('http://localhost:8080/circle/circleList?pageNum=1')</script>");
+      out.println("<script>location.replace('http://localhost:8080/circle/circleList?pageNum=1" + url + "')</script>");
       out.flush();
     } catch (IOException e) {
       // TODO Auto-generated catch block
@@ -213,36 +221,25 @@ public class CircleController {
     
     int pageNum = Integer.parseInt(request.getParameter("pageNum"));
     String user_id = (String) session.getAttribute("ss_id");
-    if (user_id == null) {
-      try {
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("<script>alert('로그인해주세요.');</script>");
-        out.println("<script>location.replace('http://localhost:8080/circle/circleList?pageNum=1')</script>");
-        out.flush();
-        return model;
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    } else {
-      model.addObject("title", "이벤트목록");
-      HashMap<String, Object> map = new HashMap<String, Object>();
-      map.put("pageNum", pageNum);
-      CircleBean view = cService.Circle_View(map);
-      ArrayList<CircleGroupBean> glist = CGService.CircleGroup_List(map);
-      logger.info(glist.toString());
-      ArrayList<CircleReplyBean> RView = cService.Circle_ReplyView(map);
-      model.addObject("glist", glist);
-      model.addObject("view", view);
-      model.addObject("RView", RView);
-      model.setViewName("redirect:http://localhost:8080/circle/circleList?pageNum=1");
-      logger.info("circleInsert-끝");
-    }
+    String Kind1 = request.getParameter("Kind1");
+    String Kind2 = request.getParameter("Kind2");
     ArrayList<MenuBean> menu = MService.menu_List();
     ArrayList<MenuBean> Smenu = MService.menu_SubList();
     model.addObject("menu", menu);
     model.addObject("Smenu", Smenu);
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("pageNum", pageNum);
+    CircleBean view = cService.Circle_View(map);
+    ArrayList<CircleGroupBean> glist = CGService.CircleGroup_List(map);
+    logger.info(glist.toString());
+    ArrayList<CircleReplyBean> RView = cService.Circle_ReplyView(map);
+    model.addObject("glist", glist);
+    model.addObject("view", view);
+    model.addObject("RView", RView);
+    model.setViewName("/circle/circleView");
+    model.addObject("title", "이벤트목록");
+    logger.info("circleInsert-끝");
+    
     return model;
   }
   
@@ -256,8 +253,8 @@ public class CircleController {
   @RequestMapping("circle/circleReply_Ins")
   public HashMap<String, Object> circleReply_Insert(HttpSession session, CircleReplyBean bean, HttpServletRequest request, HttpServletResponse response) {
     logger.info("circleReply_Insert-시작");
-    ModelAndView model = new ModelAndView();
     HashMap<String, Object> map = new HashMap<String, Object>();
+    ModelAndView model = new ModelAndView();
     logger.info(bean.toString());
     String user_id = (String) session.getAttribute("ss_id");
     
@@ -265,6 +262,37 @@ public class CircleController {
     map.put("user_id", user_id);
     cService.Circle_Reply_Ins(map);
     logger.info("circleReply_Insert-끝");
+    return map;
+  }
+  
+  /**
+   * @메소드명:circleJoin(CircleController.java)
+   * @작성자:김현석
+   * @작성일:2019. 3. 21.:오후 11:12:00
+   * @작성일:
+   */
+  
+  @ResponseBody
+  @RequestMapping("circle/circleJoin.ajax")
+  public HashMap<String, Object> circleJoin(HttpSession session, CircleJoinBean bean, HttpServletRequest request, HttpServletResponse response) {
+    logger.info("circleJoin-시작");
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    String user_id = (String) session.getAttribute("ss_id");
+    int c_groupNo = bean.getC_groupNo();
+    int circle_No = bean.getCircle_No();
+    bean.setUser_id(user_id);
+    map.put("c_groupNo", c_groupNo);
+    map.put("circle_No", circle_No);
+    map.put("user_id", user_id);
+    int cnt = CJService.CircleJoin_Chk(map);
+    if (cnt != 0) {
+      map.put("chk", "fail");
+    } else {
+      CJService.CircleJoin_Apply(bean);
+      map.put("chk", "success");
+    }
+    
+    logger.info("circleJoin-시작");
     return map;
   }
   

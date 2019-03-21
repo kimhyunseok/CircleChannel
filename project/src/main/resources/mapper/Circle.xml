@@ -58,9 +58,11 @@
 		SELECT 
 		count(a.circle_No)as circle_No 
 		FROM tb_circle  a
+		<if test="Kind1==null and Kind1==''">
 		INNER JOIN tb_file b 
 		ON a.file_no = b.file_no
 		WHERE circle_Kind = concat(#{Kind1},','#{Kind2})
+		</if>
 	</select>
 	<select
 		id="Circle_List"
@@ -107,7 +109,7 @@
 		FROM tb_circle a 
 		INNER JOIN tb_file b 
 		ON a.file_no = b.file_no
-		WHERE circle_Kind = concat(#{Kind1},','#{Kind2})
+		WHERE circle_Kind = concat(#{Kind1},',',${Kind2})
 		ORDER BY circle_No ASC LIMIT ${start}, 12  
         ) A
 		
@@ -238,4 +240,37 @@
     );
          
     </insert>
+    <select
+		id="MyCircleList"
+		parameterType="Hashmap"
+		resultType="com.test.project.Dto.CircleBean">
+	SELECT A.* FROM(
+	SELECT 
+	circle_No,
+	 user_id, 
+	 circle_Nm, 
+	 circle_Kind, 
+	 circle_Cnt,
+	circle_Content, 
+	circle_Date1, 
+	circle_Date2, 
+	circle_Time,
+	circle_PostNum, 
+	circle_Addr1, 
+	circle_Addr2, 
+	circle_Point,
+	circle_in_date, 
+	file_no, 
+	 circle_freechk, 
+	 circle_upt_date,
+	circle_Summary, 
+	circle_AplyDate1, 
+	circle_AplyDate2
+	FROM project.tb_circle
+	WHERE user_id =#{user}
+	ORDER BY circle_No ASC LIMIT ${start}, 12
+	) A
+	</select>
+    
+  
 </mapper>

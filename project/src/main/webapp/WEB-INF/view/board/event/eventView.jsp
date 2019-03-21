@@ -11,8 +11,8 @@
 	<style>
 </style>
 	<div id="wrapper" class="animate">
+	
 		<jsp:include page="/WEB-INF/view/include/menu.jsp" />
-
 		<nav aria-label="breadcrumb">
 		<ol class="breadcrumb ">
 			<li class="breadcrumb-item active" aria-current="page">Home/${requestScope.title}</li>
@@ -250,6 +250,9 @@ function point(lat,lng){
 }
 
   $(function() {
+	  
+	
+  
     $("#crops2").chained("#kind1");
     $( ".reply" ).click(function() {
     var jquery= $("#reply_area"+$(this).data("count"));

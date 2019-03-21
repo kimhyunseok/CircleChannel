@@ -177,7 +177,7 @@
     });
     $('.CirView_btn').click(function() {
       var num = $(this).data("num");
-      location.replace('http://localhost:8080/circle/circleView?pageNum=' + num);
+      location.replace('http://localhost:8080/circle/circleView?pageNum='+num+'&Kind1=${param.Kind1}&Kind2=${param.Kind2}');
     });
   });
 </script>

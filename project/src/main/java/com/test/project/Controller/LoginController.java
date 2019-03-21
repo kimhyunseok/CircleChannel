@@ -165,13 +165,12 @@ public class LoginController {
     String mail2 = email.substring(idx + 1);
     logger.info(id);
     int idchk = service.UserCnt(id);
-    if (idchk != 0) {
-      if (msg.equals("success")) {
-        logger.info("success");
-        session.setAttribute("ss_nm", nick);
-        session.setAttribute("ss_id", id);
-        model.setViewName("index");
-      }
+    if (idchk == 1) {
+      logger.info("success");
+      session.setAttribute("ss_nm", nick);
+      session.setAttribute("ss_id", id);
+      model.setViewName("redirect:http://localhost:8080/");
+      
     } else {
       UserBean bean = new UserBean();
       model.addObject("user", 1);
@@ -180,8 +179,8 @@ public class LoginController {
       map.put("user_email_1", mail1);
       map.put("user_email_2", mail2);
       model.addObject("list", map);
+      model.setViewName("redirect:http://localhost:8080/member");
     }
-    model.setViewName("redirect:http://localhost:8080/member");
     
     return model;
   }

@@ -10,6 +10,7 @@
 package com.test.project.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +43,12 @@ public class MenuService implements MenuDao {
   public ArrayList<MenuBean> menu_SubList() {
     // TODO Auto-generated method stub
     return mapper.menu_SubList();
+  }
+  
+  @Override
+  public String menu_Title(HashMap<String, Object> map) {
+    // TODO Auto-generated method stub
+    return mapper.menu_Title(map);
   }
   
 }
