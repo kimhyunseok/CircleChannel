@@ -35,8 +35,8 @@
 								</h2>
 								</header> <section id="bo_v_info">
 								<h2>페이지 정보</h2>
-								<span class="sound_only">작성자:관리자</span> </span> </span> </strong> <span class="sound_only">댓글</span> <strong> <i class="fas fa-comment"></i> 3건
-								</strong> <span class="sound_only">조회</span> <strong><i class="fa fa-eye" aria-hidden="true"></i> 79회</strong> <strong class="if_date"><span class="sound_only">작성일</span>&nbsp;<i class="far fa-calendar-alt"></i> 18-12-20 11:07</strong> </section> <section id="bo_v_atc">
+								<span class="sound_only">작성자:관리자</span> </span> </span> </strong> <span class="sound_only">댓글</span> <strong> <i class="fas fa-comment"></i> ${View.board_ReplyCnt}
+								</strong>  <strong class="if_date"><span class="sound_only">작성일</span>&nbsp;<i class="far fa-calendar-alt"></i> ${fn:substring(View.board_in_date,0,11)}</strong> </section> <section id="bo_v_atc">
 								<h2 id="bo_v_atc_title">본문</h2>
 
 								<div id="bo_v_img"></div>
@@ -137,10 +137,10 @@
 											</li>
 											<li>
 												<c:if test="${1 eq list.reply_level}">
-													<button type="button" class="btn reply_del" id="" data-type="All" data-id="${list.reply_no}" data-count="${status.index}">삭제</button>
+													<button type="button" class="btn reply_del"  onclick="fn_delBtn(${list.reply_no},'All',${status.index});">삭제</button>
 												</c:if>
 												<c:if test="${1 ne list.reply_level}">
-													<button type="button" class="btn reply_del" id="" data-id="${list.reply_no}" data-count="${status.index}">삭제</button>
+													<button type="button" class="btn reply_del"  onclick="fn_delBtn(${list.reply_no},'',${status.index});">삭제</button>
 												</c:if>
 											</li>
 										</ul>
@@ -150,13 +150,13 @@
 										<input type="hidden" name="board_no" class="board_no" value="${list.board_no}"> <input type="hidden" name="reply_no" class="reply_no" value="${list.reply_no}"> <input type="hidden" name="reply_level" class="reply_level" value="${list.reply_level}">
 										<div class="row">
 											<div class="col-sm-12">
-												<textarea class="reply_content form-control" name="reply_content" maxlength="10000" title="내용" placeholder="댓글내용을 입력해주세요" style="resize: none;"></textarea>
+												<textarea class="reply_content form-control" id="content" name="reply_content" maxlength="10000" title="내용" placeholder="댓글내용을 입력해주세요" style="resize: none;"></textarea>
 											</div>
 										</div>
 										<br>
 										<div class="row">
 											<div class="col-sm-12 text-right">
-												<button type="button" class="btn btn-danger Rereply_btn" title="등록" data-count="${status.index}">등록</button>
+												<button type="button" class="btn btn-danger" title="등록" onclick="fn_replyBtn(${list.board_no},${list.reply_no},${list.reply_level},${status.index});">등록</button>
 											</div>
 										</div>
 									</div>
@@ -170,7 +170,7 @@
 										<br>
 										<div class="row">
 											<div class="col-sm-12 text-right">
-												<button type="button" class="btn btn-danger Rereply_Ubtn" title="수정" data-count="${status.index}">수정</button>
+												<button type="button" class="btn btn-danger Rereply_Ubtn" title="수정"  onclick="fn_UpreplyBtn(${list.reply_no},${status.index});">수정</button>
 											</div>
 										</div>
 									</div>
@@ -186,7 +186,7 @@
 							<div class="container-fluid">
 								<div class="row">
 									<div class="col-sm-12">
-										<textarea class="form-control reply_content" name="reply_content" maxlength="10000" required="" class="required" title="내용" placeholder="댓글내용을 입력해주세요" style="resize: none;"></textarea>
+										<textarea class="form-control content" name="content" maxlength="10000" required="" class="required" title="내용" placeholder="댓글내용을 입력해주세요" style="resize: none;"></textarea>
 									</div>
 								</div>
 								<br>
@@ -248,11 +248,86 @@ function point(lat,lng){
     map: map
 });
 }
+function fn_replyBtn(board_no,reply_no,reply_level,no){
+	
+	var data ={
+	          "board_no":board_no,
+	          "reply_no":reply_no,
+	          "reply_level":reply_level,
+	          "reply_content":$("#reply_area"+no+" .reply_content").val()
+	          };
+	alert($("#reply_area"+no+" .reply_content").val());
+	 $.ajax({
+	        type : "POST",
+	        url : "http://localhost:8080/board/event/eventReReply_Ins.ajax",
+	        async : false,
+	        data:  data,
+	        dataType : "json",
+	        cache: false,
+	        success: function(data){    
+	         alert("저장되었습니다.");
+	         location.reload();
+	         },
+	        error : function (data) {
+	         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
+	         return false;
+	        }  
+	       });  
+
+}
+function fn_UpreplyBtn(reply_no,no){
+	 var content = "";
+     content=$("#reply_Udtarea"+$(this).data("count"));
+     var data ={
+         "reply_no":reply_no,
+         "reply_content":$("#reply_Udtarea"+no+" .reply_content").val()
+         };
+     $.ajax({
+       type : "POST",
+       url : "http://localhost:8080/board/event/Reply_Upt.ajax",
+       async : false,
+       data:  data,
+       dataType : "json",
+       cache: false,
+       success: function(data){    
+        alert("수정하셨습니다.");
+        location.reload();
+        },
+       error : function (data) {
+        alert('죄송합니다. 잠시 후 다시 시도해주세요.');
+        return false;
+       }  
+      }); 
+}
+
+function fn_delBtn(no,type,num){
+    var content = "";
+    var data ={
+        "reply_no":no,
+        "del_type":type,
+        };
+    $.ajax({
+      type : "POST",
+      url : "http://localhost:8080/board/event/Reply_Del.ajax",
+      async : false,
+      data:  data,
+      dataType : "json",
+      cache: false,
+      success: function(data){    
+       alert("삭제하셨습니다.");
+       location.reload();
+       },
+      error : function (data) {
+       alert('죄송합니다. 잠시 후 다시 시도해주세요.');
+       return false;
+      }  
+     }); 
+}
+
+
+
 
   $(function() {
-	  
-	
-  
     $("#crops2").chained("#kind1");
     $( ".reply" ).click(function() {
     var jquery= $("#reply_area"+$(this).data("count"));
@@ -262,135 +337,36 @@ function point(lat,lng){
       var jquery= $("#reply_Udtarea"+$(this).data("count"));
         $( jquery).toggle( "slow" );
       });
-    $(".Rereply_btn").click(function(){
-      var content = "";
-      content=$("#reply_area"+$(this).data("count"));
-      var data ={
-          "board_no":$("#reply_area"+$(this).data("count")+" .board_no").val(),
-          "reply_no":$("#reply_area"+$(this).data("count")+" .reply_no").val(),
-          "reply_level":$("#reply_area"+$(this).data("count")+" .reply_level").val(),
-          "reply_content":$("#reply_area"+$(this).data("count")+" .reply_content").val()
-          };
-      $.ajax({
-        type : "POST",
-        url : "http://localhost:8080/board/event/eventReReply_Ins.ajax",
-        async : false,
-        data:  data,
-        dataType : "json",
-        cache: false,
-        success: function(data){    
-         alert("저장되었습니다.");
-         location.reload();
-         },
-        error : function (data) {
-         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
-         return false;
-        }  
-       }); 
-    });
-    //답글수정시작
-    $(".Rereply_Ubtn").click(function(){
-      var content = "";
-      content=$("#reply_Udtarea"+$(this).data("count"));
-      var data ={
-          "reply_no":$("#reply_Udtarea"+$(this).data("count")+" .reply_no").val(),
-          "reply_content":$("#reply_Udtarea"+$(this).data("count")+" .reply_content").val()
-          };
-      $.ajax({
-        type : "POST",
-        url : "http://localhost:8080/board/event/Reply_Upt.ajax",
-        async : false,
-        data:  data,
-        dataType : "json",
-        cache: false,
-        success: function(data){    
-         alert("수정하셨습니다.");
-         location.reload();
-         },
-        error : function (data) {
-         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
-         return false;
-        }  
-       }); 
-    });
-    //답글수정끝
-  //답글삭제시작
-    $(".reply_del").click(function(){
-      var content = "";
-      var data ={
-          "reply_no":$(this).data("id"),
-          "del_type":$(this).data("type"),
-          };
-      $.ajax({
-        type : "POST",
-        url : "http://localhost:8080/board/event/Reply_Del.ajax",
-        async : false,
-        data:  data,
-        dataType : "json",
-        cache: false,
-        success: function(data){    
-         alert("삭제하셨습니다.");
-         location.reload();
-         },
-        error : function (data) {
-         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
-         return false;
-        }  
-       }); 
-    });
     
-    //답글수정 끝
-    $(".Rereply_btn").click(function(){
-      var content = "";
-      content=$("#reply_area"+$(this).data("count"));
-      var data ={
-          "board_no":$("#reply_area"+$(this).data("count")+" .board_no").val(),
-          "reply_no":$("#reply_area"+$(this).data("count")+" .reply_no").val(),
-          "reply_level":$("#reply_area"+$(this).data("count")+" .reply_level").val(),
-          "reply_content":$("#reply_area"+$(this).data("count")+" .reply_content").val()
-          };
-      $.ajax({
-        type : "POST",
-        url : "http://localhost:8080/board/event/eventReReply_Ins.ajax",
-        async : false,
-        data:  data,
-        dataType : "json",
-        cache: false,
-        success: function(data){    
-         alert("저장되었습니다.");
-         location.reload();
-         },
-        error : function (data) {
-         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
-         return false;
-        }  
-       }); 
-    });
+	  $("#reply_btn").click(function(){
+	      var content = "";
+	      content=$(".content").val();
+	      alert(content);
+	      $.ajax({
+	        type : "POST",
+	        url : "http://localhost:8080/board/event/eventReply_Ins.ajax",
+	        async : false,
+	        data: {
+	          "board_no": ${View.board_no},
+	          "content": content
+	      },
+	        dataType : "json",
+	        cache: false,
+	        success: function(data){    
+	         alert("저장되었습니다.");
+	         location.reload();
+	         },
+	        error : function (data) {
+	         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
+	         return false;
+	        }  
+	       }); 
+	    });
+	
+  
+
     
     
-    
-    $("#reply_btn").click(function(){
-      var content = "";
-      content=$(".reply_content").val();
-      $.ajax({
-        type : "POST",
-        url : "http://localhost:8080/board/event/eventReply_Ins.ajax",
-        async : false,
-        data: {
-          "board_no": ${View.board_no},
-          "content": content
-      },
-        dataType : "json",
-        cache: false,
-        success: function(data){    
-         alert("저장되었습니다.");
-         },
-        error : function (data) {
-         alert('죄송합니다. 잠시 후 다시 시도해주세요.');
-         return false;
-        }  
-       }); 
-    });
     
     $("#search").click(function() {
       var width=500;

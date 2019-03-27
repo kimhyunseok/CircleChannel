@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.project.Dao.BoardDao">
-	<select
-		id="board_Cnt"
-		parameterType="String"
-		resultType="int">
-		SELECT count(board_no)as board_no FROM ${value}
+	<select id="board_Cnt" parameterType="Hashmap" resultType="int">
+		SELECT
+		count(board_no)as board_no FROM ${db_table} 
+		<if test="form_search != '' and form_search != null">
+			where BOARD_NM like '%${form_search}%'
+		</if>
 	</select>
-	<select
-		id="board_List"
-		parameterType="Hashmap"
+	<select id="board_List" parameterType="Hashmap"
 		resultType="com.test.project.Dto.BoardBean">
 		SELECT
 		BOARD_NO,
@@ -17,12 +16,29 @@
 		BOARD_CONTENT,
 		BOARD_IN_DATE,
 		BOARD_DEL_CHK
-		FROM ${db_table}
-		ORDER BY BOARD_NO ASC LIMIT #{start}, 10
+		FROM
+		${db_table}
+		WHERE 1=1
+		<if test="form_search != '' and form_search != null">
+			and BOARD_NM like '%${form_search}%'
+		</if>
+
+		ORDER BY BOARD_NO ASC
+		<if test="order != '' and order != null">
+			<choose>
+				<when test="order eq 1">
+					, BOARD_NM asc
+				</when>
+				<when test="order eq 2">
+					, BOARD_IN_DATE asc
+				</when>
+			</choose>
+
+		</if>
+
+		LIMIT #{start}, 10
 	</select>
-	<select
-		id="board_View"
-		parameterType="Hashmap"
+	<select id="board_View" parameterType="Hashmap"
 		resultType="com.test.project.Dto.BoardBean">
 		SELECT A.*
 		FROM (
@@ -34,9 +50,13 @@
 		`BOARD_IN_DATE`,
 		`BOARD_DEL_DATE`,
 		`BOARD_MOD_DATE`,
-		LEAD(BOARD_NO, 1) OVER (ORDER BY BOARD_NO DESC) AS NEXT_NO,
-		LEAD(BOARD_NM, 1, '다음글이 없습니다') OVER (ORDER BY BOARD_NO DESC) AS NEXT_NM,
-		LEAD(BOARD_IN_DATE, 1, null) OVER (ORDER BY BOARD_NO DESC) AS NEXT_DATE,
+		fn_replycnt(BOARD_NO,'event')as BOARD_ReplyCnt,
+		LEAD(BOARD_NO, 1) OVER (ORDER BY BOARD_NO DESC) AS
+		NEXT_NO,
+		LEAD(BOARD_NM, 1, '다음글이 없습니다') OVER (ORDER BY BOARD_NO DESC)
+		AS NEXT_NM,
+		LEAD(BOARD_IN_DATE, 1, null) OVER (ORDER BY BOARD_NO DESC)
+		AS NEXT_DATE,
 		LAG(BOARD_NO, 1) OVER (ORDER BY BOARD_NO DESC) AS PRE_NO,
 		LAG(BOARD_NM, 1, '이전글이 없습니다') OVER (ORDER BY BOARD_NO DESC) AS PRE_NM,
 		LAG(BOARD_IN_DATE, 1, null) OVER (ORDER BY BOARD_NO DESC) AS PRE_DATE
@@ -45,9 +65,7 @@
 		WHERE A.BOARD_NO = ${board_No};
 
 	</select>
-	<insert
-		id="board_Insert"
-		parameterType="hashmap">
+	<insert id="board_Insert" parameterType="hashmap">
 		INSERT INTO ${dbtable}
 		(
 		`board_nm`,
@@ -63,20 +81,17 @@
 		NOW()
 		)
 	</insert>
-	<update
-		id="board_upt"
-		parameterType="hashmap">
+	<update id="board_upt" parameterType="hashmap">
 		UPDATE ${db_table}
 		SET
 		`board_content` = ${list.board_no},
-		`board_nm`		=${list.board_nm},
-		`board_fileNo`	=${list.board_fileNo},
+		`board_nm` =${list.board_nm},
+		`board_fileNo` =${list.board_fileNo},
 		`board_mod_date`=NOW()
-		WHERE BOARD_NO=${list.board_no}
+		WHERE
+		BOARD_NO=${list.board_no}
 	</update>
-	<update
-		id="board_del"
-		parameterType="hashmap">
+	<update id="board_del" parameterType="hashmap">
 		UPDATE ${db_table}
 		SET
 		`board_del_chk` = "Y"

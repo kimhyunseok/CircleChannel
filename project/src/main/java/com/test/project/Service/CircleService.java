@@ -80,4 +80,10 @@ public class CircleService implements CircleDao {
     return mapper.MyCircleList(map);
   }
   
+  @Override
+  public ArrayList<CircleBean> circle_mainList(HashMap<String, Object> map) {
+    // TODO Auto-generated method stub
+    return mapper.circle_mainList(map);
+  }
+  
 }

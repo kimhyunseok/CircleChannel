@@ -11,7 +11,7 @@ import com.test.project.Dto.BoardBean;
 public interface BoardDao {
   public int board_Insert(HashMap<String, Object> map);
   
-  public int board_Cnt(String db);
+  public int board_Cnt(HashMap<String, Object> map);
   
   public void board_del(HashMap<String, Object> map);
   

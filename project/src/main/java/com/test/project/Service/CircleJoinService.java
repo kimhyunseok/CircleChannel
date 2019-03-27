@@ -1,5 +1,6 @@
 package com.test.project.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
@@ -34,6 +35,18 @@ public class CircleJoinService implements CircleJoinDao {
   public void CircleJoin_Apply(CircleJoinBean bean) {
     // TODO Auto-generated method stub
     mapper.CircleJoin_Apply(bean);
+  }
+  
+  @Override
+  public ArrayList<CircleJoinBean> CircleApply_list(int circle_No) {
+    // TODO Auto-generated method stub
+    return mapper.CircleApply_list(circle_No);
+  }
+  
+  @Override
+  public void CircleJoin_Cancel(HashMap<String, Object> map) {
+    // TODO Auto-generated method stub
+    mapper.CircleJoin_Cancel(map);
   }
   
 }

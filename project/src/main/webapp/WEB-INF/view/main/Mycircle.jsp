@@ -77,7 +77,7 @@
 												<td><a class="btn btn-default" href="http://localhost:8080/board/event/eventView?pageNum=${list.circle_No}">${list.circle_Nm}</a></td>
 												<td class="text-center">관리자</td>
 												<td class="text-center">${fn:substring(list.circle_in_date,0,11)}</td>
-												<td class="text-center"><button class="btn btn-primary" >신청자관리</button>&nbsp;<button class="btn btn-primary" >수정</button></td>
+												<td class="text-center"><button type="button" class="btn btn-primary" onclick="fn_apply(${list.circle_No});">신청자관리</button>&nbsp;<button class="btn btn-primary" >수정</button></td>
 											</tr>
 									</c:forEach>
 								</c:if>
@@ -147,6 +147,13 @@
 </body>
 </html>
 <script type="text/javascript">
+function fn_apply(test){
+    var windowW = 600;  // 창의 가로 길이
+    var windowH = 500;  // 창의 세로 길이
+    var left = Math.ceil((window.screen.width - windowW)/2);
+    var top = Math.ceil((window.screen.height - windowH)/2);
+    window.open("./ApplyPeopleList?circle_no="+test,"pop_01","top="+top+", left="+left+", height="+windowH+", width="+windowW+"scrollbars=no");
+}
   $(function() {
     $('#b_Insert').click(function() {
       location.replace('http://localhost:8080/circle/circleInsert');

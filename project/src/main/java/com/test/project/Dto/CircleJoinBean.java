@@ -19,4 +19,14 @@ public class CircleJoinBean {
   private String user_id;
   private String circleJoin_in_date;
   private String circleJoin_cancel_date;
+  private String circle_Nm;
+  private String circle_AplyDate1;
+  private String circle_AplyDate2;
+  private String user_nm;
+  private String user_phone;
+  private String user_email_1;
+  private String user_email_2;
+  private String c_groupTitle;
+  private String c_groupPay;
+  private String c_group_PFchk;
 }

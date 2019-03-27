@@ -28,4 +28,6 @@ public interface CircleDao {
   
   public ArrayList<CircleBean> MyCircleList(HashMap<String, Object> map);
   
+  public ArrayList<CircleBean> circle_mainList(HashMap<String, Object> map);
+  
 }

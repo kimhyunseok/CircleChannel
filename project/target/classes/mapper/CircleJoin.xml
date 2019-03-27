@@ -18,6 +18,44 @@
 		;
      
   </select>
+  	<select id="CircleApply_list"   
+  parameterType="int"
+  resultType="com.test.project.Dto.CircleJoinBean"
+  >
+ SELECT
+	B.circle_No,
+	B.user_id,
+	b.c_groupno,
+	b.circleJoin_in_date,
+	b.circleJoin_No,
+	circle_Nm,
+	circle_AplyDate1,
+	circle_AplyDate2,
+	c.user_nm,
+	c.user_phone,
+	c.user_email_1,
+	c.user_email_2,
+	d.c_groupTitle,
+	d.c_groupPay,
+	d.c_group_PFchk
+FROM
+	project.tb_circle A
+inner join 
+    tb_circlejoin B
+on A.circle_No=B.circle_no
+inner join 
+    tb_user C
+    on c.user_id=b.user_id
+inner join
+   tb_circle_group D
+   on d.c_groupNo=b.c_groupno
+   where circle_state='1' and A.circle_No =#{param}
+order by circleJoin_No
+	;
+  
+  </select>
+  
+  
 	<insert id="CircleJoin_Apply" 
 	        parameterType="com.test.project.Dto.CircleJoinBean">
 	 INSERT INTO 
@@ -26,15 +64,29 @@
 	`circle_no`,
 	`c_groupno`,
 	`user_id`,
-	`circleJoin_in_date`
+	`circleJoin_in_date`,
+	`circle_state`
 	)
 	VALUES
 	(
 	#{circle_No},
 	#{c_groupNo},
 	#{user_id},
-	now()
+	now(),
+	`1`
 	);
-	        
 	</insert>
+	<update id="CircleJoin_Cancel"
+	parameterType="Hashmap"
+	>
+	update
+	tb_circlejoin
+set
+	
+	circle_state = 2
+where
+	circleJoin_No = #{CircleJoin_no}
+	</update>
+	
+	
 </mapper>

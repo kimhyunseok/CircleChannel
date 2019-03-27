@@ -1,276 +1,390 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.test.project.Dao.CircleDao">
-	
-	<insert id="Circle_insert" 
-	        parameterType="com.test.project.Dto.CircleBean"
-          useGeneratedKeys="true"
-    keyProperty="circle_No" 
-	       >
+
+	<insert id="Circle_insert"
+		parameterType="com.test.project.Dto.CircleBean"
+		useGeneratedKeys="true" keyProperty="circle_No">
 		INSERT INTO tb_circle
 		(
-			`CIRCLE_NO`,        
-			`CIRCLE_NM`,          
-			`CIRCLE_KIND`,        
-			`CIRCLE_CNT`,         
-			`CIRCLE_CONTENT`,     
-			`CIRCLE_DATE1`,  
-             `CIRCLE_DATE2`,      
-			`CIRCLE_TIME`,        
-			`CIRCLE_POSTNUM`,     
-			`CIRCLE_ADDR1`,       
-			`CIRCLE_ADDR2`,   
-              `CIRCLE_SUMMARY`,    
-			`CIRCLE_POINT`,       
-			`CIRCLE_IN_DATE`,
-			`FILE_NO`, 
-            `USER_ID`,
-            `CIRCLE_APLYDATE1`,
-            `CIRCLE_APLYDATE2`
+		`CIRCLE_NO`,
+		`CIRCLE_NM`,
+		`CIRCLE_KIND`,
+		`CIRCLE_PFCHK`,
+		`CIRCLE_CONTENT`,
+		`CIRCLE_DATE1`,
+		`CIRCLE_DATE2`,
+		`CIRCLE_TIME`,
+		`CIRCLE_POSTNUM`,
+		`CIRCLE_ADDR1`,
+		`CIRCLE_ADDR2`,
+		`CIRCLE_SUMMARY`,
+		`CIRCLE_POINT`,
+		`CIRCLE_IN_DATE`,
+		`FILE_NO`,
+		`USER_ID`,
+		`CIRCLE_APLYDATE1`,
+		`CIRCLE_APLYDATE2`
 		)
 		VALUES
 		(
-			#{circle_No},    
-			#{circle_Nm},          
-			#{circle_Kind},        
-			#{circle_Cnt},         
-			#{circle_Content},     
-             concat(#{circle_Date1},' ',#{circle_Date1_week}),
-             concat(#{circle_Date2},' ',#{circle_Date2_week}), 
-			#{circle_Time},        
-			#{circle_PostNum},     
-			#{circle_Addr1},       
-			#{circle_Addr2},  
-            #{circle_Summary},     
-			#{circle_Point},       
-			NOW(),     
-			#{file_no},
-            #{user_id},
-            #{circle_AplyDate1},
-            #{circle_AplyDate2}
+		#{circle_No},
+		#{circle_Nm},
+		#{circle_Kind},
+		#{c_group_PFchk},
+		#{circle_Content},
+		concat(#{circle_Date1},' ',#{circle_Date1_week}),
+		concat(#{circle_Date2},' ',#{circle_Date2_week}),
+		#{circle_Time},
+		#{circle_PostNum},
+		#{circle_Addr1},
+		#{circle_Addr2},
+		#{circle_Summary},
+		#{circle_Point},
+		NOW(),
+		#{file_no},
+		#{user_id},
+		#{circle_AplyDate1},
+		#{circle_AplyDate2}
 		)
 	</insert>
-	
-	<select
-		id="Circle_Cnt"
-		parameterType="Hashmap"
-		resultType="int">
-		SELECT 
-		count(a.circle_No)as circle_No 
-		FROM tb_circle  a
-		<if test="Kind1==null and Kind1==''">
-		INNER JOIN tb_file b 
-		ON a.file_no = b.file_no
-		WHERE circle_Kind = concat(#{Kind1},','#{Kind2})
+
+	<select id="Circle_Cnt" parameterType="Hashmap" resultType="int">
+		SELECT
+		count(circle_No)as circle_No
+		FROM tb_circle
+
+		WHERE circle_Kind = concat(#{Kind1},','#{Kind1})
+
+		<if test="form_search != '' and form_search != null">
+			and circle_Nm like '%${form_search}%'
+		</if>
+		<if test="code != '' and code != null">
+			and circle_Kind=#{code}
+		</if>
+		<if test="location != ''">
+			<choose>
+				<when test="location eq 'Seo1'">
+				and	circle_Addr1 like '서울%'
+				</when>
+				<when test="location eq 'De1'">
+				and	circle_Addr1 like '대전%'
+				</when>
+				<when test="location eq 'Boo1'">
+				and	circle_Addr1 like '부산%' or '울산%'
+				</when>
+				<when test="location eq 'In1'">
+				and	circle_Addr1 like '인천%'or'경기%'
+				</when>
+				<when test="location eq 'Je1'">
+				and	circle_Addr1 like '제주%'
+				</when>
+			</choose>
+		</if>
+		<if test="pay != ''  and pay !=null">
+		<choose>
+			<when test="pay eq 1 or pay eq 2 ">
+			and circle_PFchk = #{pay}
+			</when>
+			<when test="pay eq 3  ">
+			and circle_time between '09:00' and '12:00'
+			</when>
+			<when test="pay eq 4 ">
+			and circle_time between '12:00' and '18:00'
+			</when>
+		</choose>
+		</if>
+		<if test="date != '' and date !=null">
+		 #{date} between circle_Date1 and circle_Date2
 		</if>
 	</select>
-	<select
-		id="Circle_List"
-		parameterType="Hashmap"
+	<select id="Circle_List" parameterType="Hashmap"
 		resultType="Hashmap">
 		SELECT A.* FROM(
-		SELECT 
-            a.circle_No,        
-			`circle_Nm`,          
-			`circle_Kind`,        
-			`circle_Content`,     
-		 substring_index( `circle_Date1`,' ' ,1) circle_Date1,
-         (CASE  substring_index( `circle_Date1`,' ' ,-1) 
-			WHEN 'Monday' THEN '월'
-            WHEN 'Thursday' THEN '화'
-            WHEN 'Wednesday' THEN '수'
-            WHEN 'Thursday' THEN '목'
-            WHEN 'Friday' THEN '금'
-            WHEN 'Saturday' THEN '토'
-            WHEN 'Sunday' THEN '일'
-			END ) circle_Date1_week,
-            substring_index( `circle_Date2`,' ' ,1)`circle_Date2`,
-			(CASE  substring_index( `circle_Date1`,' ' ,-1) 
-			WHEN 'Monday' THEN '월'
-            WHEN 'Thursday' THEN '화'
-            WHEN 'Wednesday' THEN '수'
-            WHEN 'Thursday' THEN '목'
-            WHEN 'Friday' THEN '금'
-            WHEN 'Saturday' THEN '토'
-            WHEN 'Sunday' THEN '일'
-			END ) circle_Date2_week,
-			`circle_Time`,        
-			`circle_PostNum`,     
-			`circle_Addr1`,       
-			`circle_Addr2`,       
-			`circle_Point`,       
-			`circle_in_date`,     
-			a.`file_no`, 
-            b.`file_name`,
-            b.`file_url`,
-            user_id,
-            fn_CircleCnt(a.circle_No) as circle_Cnt
-            
-		FROM tb_circle a 
-		INNER JOIN tb_file b 
+		SELECT
+		a.circle_No,
+		`circle_Nm`,
+		`circle_Kind`,
+		`circle_Content`,
+		substring_index( `circle_Date1`,' ' ,1) circle_Date1,
+		(CASE substring_index( `circle_Date1`,' ' ,-1)
+		WHEN 'Monday' THEN '월'
+		WHEN 'Thursday' THEN '화'
+		WHEN 'Wednesday' THEN '수'
+		WHEN 'Thursday' THEN '목'
+		WHEN 'Friday' THEN '금'
+		WHEN 'Saturday' THEN '토'
+		WHEN 'Sunday' THEN '일'
+		END ) circle_Date1_week,
+		substring_index( `circle_Date2`,' ' ,1)`circle_Date2`,
+		(CASE substring_index( `circle_Date1`,' ' ,-1)
+		WHEN 'Monday' THEN '월'
+		WHEN 'Thursday' THEN '화'
+		WHEN 'Wednesday' THEN '수'
+		WHEN 'Thursday' THEN '목'
+		WHEN 'Friday' THEN '금'
+		WHEN 'Saturday' THEN '토'
+		WHEN 'Sunday' THEN '일'
+		END ) circle_Date2_week,
+		`circle_Time`,
+		`circle_PostNum`,
+		`circle_Addr1`,
+		`circle_Addr2`,
+		`circle_Point`,
+		`circle_in_date`,
+		a.`file_no`,
+		b.`file_name`,
+		b.`file_url`,
+		user_id,
+		fn_CircleCnt(a.circle_No) as circle_Cnt
+
+		FROM tb_circle a
+		INNER JOIN tb_file b
 		ON a.file_no = b.file_no
-		WHERE circle_Kind = concat(#{Kind1},',',${Kind2})
-		ORDER BY circle_No ASC LIMIT ${start}, 12  
-        ) A
-		
+		WHERE circle_Kind =
+		concat(#{Kind1},',',${Kind2})
+		<if test="form_search != ''">
+			and circle_Nm like '%${form_search}%'
+		</if>
+		<if test="code != '' and code != null">
+			and circle_Kind=#{code}
+		</if>
+		<if test="location != '' and location!=null">
+			<choose>
+				<when test="location eq 'Seo1'">
+				and	circle_Addr1 like '서울%'
+				</when>
+				<when test="location eq 'De1'">
+				and	circle_Addr1 like '대전%'
+				</when>
+				<when test="location eq 'Boo1'">
+				and	circle_Addr1 like '부산%' or '울산%'
+				</when>
+				<when test="location eq 'In1'">
+				and	circle_Addr1 like '인천%'or'경기%'
+				</when>
+				<when test="location eq 'Je1'">
+				and	circle_Addr1 like '제주%'
+				</when>
+			</choose>
+		</if>
+		<if test="pay != '' and pay !=null">
+		<choose>
+			<when test="pay eq 1 or pay eq 2 ">
+			and circle_PFchk = #{pay}
+			</when>
+			<when test="pay eq 3  ">
+			and circle_time between '09:00' and '12:00'
+			</when>
+			<when test="pay eq 4 ">
+			and circle_time between '12:00' and '18:00'
+			</when>
+		</choose>
+		</if>
+		<if test="date != '' and date !=null ">
+		 #{date} between circle_Date1 and circle_Date2
+		</if>
+		ORDER BY circle_No ASC LIMIT ${start}, 12
+		) A
+
 	</select>
-	<select
-		id="Circle_View"
-		parameterType="Hashmap"
+	<select id="Circle_View" parameterType="Hashmap"
 		resultType="com.test.project.Dto.CircleBean">
-    	SELECT A.*
-    		FROM (
-    		SELECT
-    		`CIRCLE_NO`,
-    		`CIRCLE_NM`,
-    		`CIRCLE_CNT`,
-    		`CIRCLE_CONTENT`,
-    		 SUBSTRING_INDEX( `CIRCLE_DATE1`,' ' ,1) CIRCLE_DATE1,
-            (CASE  SUBSTRING_INDEX( `CIRCLE_DATE1`,' ' ,-1) 
-  			    WHEN 'MONDAY' THEN '월'
-                WHEN 'THURSDAY' THEN '화'
-                WHEN 'WEDNESDAY' THEN '수'
-                WHEN 'THURSDAY' THEN '목'
-                WHEN 'FRIDAY' THEN '금'
-                WHEN 'SATURDAY' THEN '토'
-                WHEN 'SUNDAY' THEN '일'
-			 END 
-            ) CIRCLE_DATE1_WEEK,
-            SUBSTRING_INDEX( `CIRCLE_DATE2`,' ' ,1)`CIRCLE_DATE2`,
-			(CASE  SUBSTRING_INDEX( `CIRCLE_DATE2`,' ' ,-1) 
-			WHEN 'MONDAY' THEN '월'
-            WHEN 'THURSDAY' THEN '화'
-            WHEN 'WEDNESDAY' THEN '수'
-            WHEN 'THURSDAY' THEN '목'
-            WHEN 'FRIDAY' THEN '금'
-            WHEN 'SATURDAY' THEN '토'
-            WHEN 'SUNDAY' THEN '일'
-			END ) CIRCLE_DATE2_WEEK,
-    		`CIRCLE_TIME`,
-            `CIRCLE_POSTNUM`,
-    	    `CIRCLE_ADDR1`,
-    		`CIRCLE_ADDR2`,
-    		`CIRCLE_POINT`,
-    		`CIRCLE_IN_DATE`,
-            `CIRCLE_SUMMARY`,
-            (fn_replycnt(A.circle_no,'circle'))circle_recnt,
-    	    A.file_no	,
-            B.FILE_NAME,
-            B.FILE_URL,
-            C.USER_ID,
-            C.USER_NM,
-    		C.USER_PHONE,
-            C.USER_EMAIL_1,
-            C.USER_EMAIL_2
-    		FROM TB_CIRCLE A INNER JOIN TB_FILE B ON A.FILE_NO =B.FILE_NO INNER JOIN TB_USER C ON A.USER_ID=C.USER_ID WHERE A.CIRCLE_NO = ${pageNum}
-    		) A
-    	
-       
+		SELECT A.*
+		FROM (
+		SELECT
+		`CIRCLE_NO`,
+		`CIRCLE_NM`,
+		`CIRCLE_CNT`,
+		`CIRCLE_CONTENT`,
+		SUBSTRING_INDEX( `CIRCLE_DATE1`,' ' ,1) CIRCLE_DATE1,
+		(CASE SUBSTRING_INDEX( `CIRCLE_DATE1`,' ' ,-1)
+		WHEN 'MONDAY' THEN '월'
+		WHEN 'THURSDAY' THEN '화'
+		WHEN 'WEDNESDAY' THEN '수'
+		WHEN 'THURSDAY' THEN '목'
+		WHEN 'FRIDAY' THEN '금'
+		WHEN 'SATURDAY' THEN '토'
+		WHEN 'SUNDAY' THEN '일'
+		END
+		) CIRCLE_DATE1_WEEK,
+		SUBSTRING_INDEX( `CIRCLE_DATE2`,' ' ,1)`CIRCLE_DATE2`,
+		(CASE SUBSTRING_INDEX( `CIRCLE_DATE2`,' ' ,-1)
+		WHEN 'MONDAY' THEN '월'
+		WHEN 'THURSDAY' THEN '화'
+		WHEN 'WEDNESDAY' THEN '수'
+		WHEN 'THURSDAY' THEN '목'
+		WHEN 'FRIDAY' THEN '금'
+		WHEN 'SATURDAY' THEN '토'
+		WHEN 'SUNDAY' THEN '일'
+		END ) CIRCLE_DATE2_WEEK,
+		`CIRCLE_TIME`,
+		`CIRCLE_POSTNUM`,
+		`CIRCLE_ADDR1`,
+		`CIRCLE_ADDR2`,
+		`CIRCLE_POINT`,
+		`CIRCLE_IN_DATE`,
+		`CIRCLE_SUMMARY`,
+		(fn_replycnt(A.circle_no,'circle'))circle_recnt,
+		A.file_no ,
+		B.FILE_NAME,
+		B.FILE_URL,
+		C.USER_ID,
+		C.USER_NM,
+		C.USER_PHONE,
+		C.USER_EMAIL_1,
+		C.USER_EMAIL_2
+		FROM TB_CIRCLE A INNER JOIN TB_FILE B ON A.FILE_NO =B.FILE_NO INNER JOIN
+		TB_USER C ON A.USER_ID=C.USER_ID WHERE A.CIRCLE_NO = ${pageNum}
+		) A
+
+
 	</select>
-	
-  <select id="Circle_ReplyView"   
-  parameterType="hashmap"
-  resultType="com.test.project.Dto.CircleReplyBean"
-  >
-        SELECT `reply_no`,
-          `circle_no`,
-          `reply_content`,
-          `reply_id`,
-          B.user_nm,
-          `reply_level`,
-          `reply_in_date`,
-          `reply_del_date`,
-          `reply_upt_date`,
-          `reply_re_no`
-      FROM  tb_circle_reply A INNER JOIN tb_user B ON A.reply_id = B.user_id 
-      WHERE CIRCLE_NO = ${pageNum}
-      ORDER BY REPLY_RE_NO ASC,REPLY_NO ASC
-      ;
-  </select>
-	<update
-		id="Circle_upt"
-		parameterType="hashmap">
+
+	<select id="Circle_ReplyView" parameterType="hashmap"
+		resultType="com.test.project.Dto.CircleReplyBean">
+		SELECT `reply_no`,
+		`circle_no`,
+		`reply_content`,
+		`reply_id`,
+		B.user_nm,
+		`reply_level`,
+		`reply_in_date`,
+		`reply_del_date`,
+		`reply_upt_date`,
+		`reply_re_no`
+		FROM tb_circle_reply A INNER JOIN tb_user B ON A.reply_id = B.user_id
+		WHERE CIRCLE_NO = ${pageNum}
+		ORDER BY REPLY_RE_NO ASC,REPLY_NO ASC
+		;
+	</select>
+	<update id="Circle_upt" parameterType="hashmap">
 		UPDATE ${db_table}
 		SET
 		`board_content` = ${list.board_no},
-		`board_nm`		=${list.board_nm},
-		`board_fileNo`	=${list.board_fileNo},
+		`board_nm` =${list.board_nm},
+		`board_fileNo` =${list.board_fileNo},
 		`board_mod_date`=NOW(),
-		WHERE BOARD_NO=${list.board_no}
+		WHERE
+		BOARD_NO=${list.board_no}
 	</update>
-	<update
-		id="Circle_del"
-		parameterType="hashmap">
+	<update id="Circle_del" parameterType="hashmap">
 		UPDATE ${db_table}
 		SET
 		`board_del_chk` = "Y"
 		WHERE board_no=${num}
 	</update>
-  
-   <insert id="Circle_Reply_Ins"  parameterType="Hashmap">
-         <selectKey resultType="string" keyProperty="reply_no" order="BEFORE">
-             SELECT ifnull(MAX(reply_no)+1,1) FROM tb_circle_reply        
-    </selectKey>    
-   INSERT INTO `tb_circle_reply`
-      (
-      `circle_no`,
-      `reply_content`,
-      `reply_id`,
-      `reply_level`,
-      `reply_re_no`,
-      `reply_in_date`
-      )
-      VALUES
-      (
-      ${bean.circle_no},
-      '${bean.reply_content}',
-      '${user_id}',
-      <if test="bean.reply_no == 0">
-      1,
-     ${reply_no},
-      </if>
-      <if test="bean.reply_level != 0">
-     (SELECT MAX(a.reply_level)+1 reply_no
-		FROM tb_circle_reply a
-		WHERE
-		a.circle_no=${bean.circle_no} AND a.reply_re_no=${bean.reply_no}),
-     ${bean.reply_no},
-      </if>
-    now()
-    );
-         
-    </insert>
-    <select
-		id="MyCircleList"
-		parameterType="Hashmap"
+
+	<insert id="Circle_Reply_Ins" parameterType="Hashmap">
+		<selectKey resultType="string" keyProperty="reply_no"
+			order="BEFORE">
+			SELECT ifnull(MAX(reply_no)+1,1) FROM tb_circle_reply
+		</selectKey>
+		INSERT INTO `tb_circle_reply`
+		(
+		`circle_no`,
+		`reply_content`,
+		`reply_id`,
+		`reply_level`,
+		`reply_re_no`,
+		`reply_in_date`
+		)
+		VALUES
+		(
+		${bean.circle_no},
+		'${bean.reply_content}',
+		'${user_id}',
+		<if test="bean.reply_no == 0">
+			1,
+			${reply_no},
+		</if>
+		<if test="bean.reply_level != 0">
+			(SELECT MAX(a.reply_level)+1 reply_no
+			FROM tb_circle_reply a
+			WHERE
+			a.circle_no=${bean.circle_no} AND a.reply_re_no=${bean.reply_no}),
+			${bean.reply_no},
+		</if>
+		now()
+		);
+
+	</insert>
+	<select id="MyCircleList" parameterType="Hashmap"
 		resultType="com.test.project.Dto.CircleBean">
-	SELECT A.* FROM(
-	SELECT 
-	circle_No,
-	 user_id, 
-	 circle_Nm, 
-	 circle_Kind, 
-	 circle_Cnt,
-	circle_Content, 
-	circle_Date1, 
-	circle_Date2, 
-	circle_Time,
-	circle_PostNum, 
-	circle_Addr1, 
-	circle_Addr2, 
-	circle_Point,
-	circle_in_date, 
-	file_no, 
-	 circle_freechk, 
-	 circle_upt_date,
-	circle_Summary, 
-	circle_AplyDate1, 
-	circle_AplyDate2
-	FROM project.tb_circle
-	WHERE user_id =#{user}
-	ORDER BY circle_No ASC LIMIT ${start}, 12
-	) A
+		SELECT A.* FROM(
+		SELECT
+		circle_No,
+		user_id,
+		circle_Nm,
+		circle_Kind,
+		circle_Content,
+		circle_Date1,
+		circle_Date2,
+		circle_Time,
+		circle_PostNum,
+		circle_Addr1,
+		circle_Addr2,
+		circle_Point,
+		circle_in_date,
+		file_no,
+		circle_freechk,
+		circle_upt_date,
+		circle_Summary,
+		circle_AplyDate1,
+		circle_AplyDate2
+		FROM project.tb_circle
+		WHERE user_id =#{user}
+		ORDER BY circle_No ASC LIMIT ${start}, 12
+		) A
 	</select>
-    
-  
+
+	<select id="circle_mainList" resultType="com.test.project.Dto.CircleBean" >
+	SELECT A.* FROM(
+		SELECT
+		a.circle_No,
+		`circle_Nm`,
+		`circle_Kind`,
+		`circle_Content`,
+		substring_index( `circle_Date1`,' ' ,1) circle_Date1,
+		(CASE substring_index( `circle_Date1`,' ' ,-1)
+		WHEN 'Monday' THEN '월'
+		WHEN 'Thursday' THEN '화'
+		WHEN 'Wednesday' THEN '수'
+		WHEN 'Thursday' THEN '목'
+		WHEN 'Friday' THEN '금'
+		WHEN 'Saturday' THEN '토'
+		WHEN 'Sunday' THEN '일'
+		END ) circle_Date1_week,
+		substring_index( `circle_Date2`,' ' ,1)`circle_Date2`,
+		(CASE substring_index( `circle_Date1`,' ' ,-1)
+		WHEN 'Monday' THEN '월'
+		WHEN 'Thursday' THEN '화'
+		WHEN 'Wednesday' THEN '수'
+		WHEN 'Thursday' THEN '목'
+		WHEN 'Friday' THEN '금'
+		WHEN 'Saturday' THEN '토'
+		WHEN 'Sunday' THEN '일'
+		END ) circle_Date2_week,
+		`circle_Time`,
+		`circle_PostNum`,
+		`circle_Addr1`,
+		`circle_Addr2`,
+		`circle_Point`,
+		`circle_in_date`,
+		a.`file_no`,
+		b.`file_name`,
+		b.`file_url`,
+		user_id,
+		fn_CircleCnt(a.circle_No) as circle_Cnt
+
+		FROM tb_circle a
+		INNER JOIN tb_file b
+		ON a.file_no = b.file_no
+		WHERE 
+		substring(a.circle_in_date, 1, 10)= substring(now(), 1, 10)
+		ORDER BY circle_No ASC LIMIT 0, 8
+		) A;
+     
+	</select>
+
 </mapper>

@@ -17,6 +17,7 @@ public class CircleBean {
   private String circle_Nm;
   private String circle_Kind;
   private int circle_Cnt;
+  private int c_group_PFchk;
   private String circle_Content;
   private String circle_intro;
   private String circle_Time;

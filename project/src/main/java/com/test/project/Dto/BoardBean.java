@@ -18,6 +18,7 @@ public class BoardBean {
   private String board_title;
   private String board_content;
   private String board_in_date;
+  private int board_ReplyCnt;
   private int board_view_cnt;
   private int board_fileNo;
   private String next_no;

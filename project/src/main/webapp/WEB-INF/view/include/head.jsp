@@ -20,9 +20,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.js"></script>
 <script src="http://localhost:8080/js/bootstrap-clockpicker.min.js"></script>
 <link href="http://localhost:8080/css/bootstrap-clockpicker.min.css" rel="stylesheet">
-<script src="http://localhost:8080/js/plugin.js"></script>
 <script src="https://cdn.ckeditor.com/4.10.0/full/ckeditor.js"></script>
-<script type="text/javascript" src="https://static.onoffmix.com/js/pc/dist/event/event-view.js"></script>
+
 <!-- include summernote css/js-->
  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
  <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>

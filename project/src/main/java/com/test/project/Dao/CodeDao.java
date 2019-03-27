@@ -1,6 +1,7 @@
 package com.test.project.Dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +16,5 @@ import com.test.project.Dto.CodeBean;
  */
 @Mapper
 public interface CodeDao {
-  ArrayList<CodeBean> Code_List();
+  ArrayList<CodeBean> Code_List(HashMap<String, Object> map);
 }

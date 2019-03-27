@@ -88,22 +88,47 @@ public class CircleController {
     ModelAndView model = new ModelAndView();
     HashMap<String, Object> map = new HashMap<String, Object>();
     ArrayList<CircleBean> list;
+    // 0.코드불러오기-시작
+    map.put("Kind", 1);
+    ArrayList<CodeBean> code1 = CodeService.Code_List(map);
+    map.put("Kind", 2);
+    ArrayList<CodeBean> code2 = CodeService.Code_List(map);
+    // 0.코드불러오기-끝
+    // 1.메뉴불러오기-시작
     ArrayList<MenuBean> menu = MService.menu_List();
     ArrayList<MenuBean> Smenu = MService.menu_SubList();
     model.addObject("menu", menu);
     model.addObject("Smenu", Smenu);
-    
+    // 1.메뉴불러오기-끝
+    // 2.카테고리가져오기-시작
     String kind1 = req.getParameter("Kind1");
     String kind2 = req.getParameter("Kind2");
     map.put("Kind1", kind1);
     map.put("Kind2", kind2);
-    int listCnt = cService.Circle_Cnt(map);
+    // 2.카테고리가져오기-끝
+    // 3.검색한 값가져오기-시작
+    String form_search = req.getParameter("form_search");
+    String code = req.getParameter("code");
+    String location = req.getParameter("location");
+    String pay = req.getParameter("pay");
+    String date = req.getParameter("date");
+    map.put("form_search", form_search);
+    map.put("code", code);
+    map.put("location", location);
+    map.put("pay", pay);
+    map.put("date", date);
+    // 3.검색한 값가져오기-끝
+    logger.info(">>>>>>>>>>>" + map.toString());
     // 전체리스트 개수
+    int listCnt = cService.Circle_Cnt(map);
     int curNum = Integer.parseInt(req.getParameter("pageNum"));
     // 현재 페이지
     test = new pagingBean(listCnt, curNum, 12);
     map.put("start", test.getStartIndex());
     list = cService.Circle_List(map);
+    
+    model.addObject("code1", code1);
+    model.addObject("code2", code2);
     model.addObject("list", list);
     model.addObject("pagination", test);
     model.setViewName("circle/circleList");
@@ -121,11 +146,14 @@ public class CircleController {
    */
   @RequestMapping("circle/circleInsert")
   public ModelAndView circleInsert(HttpServletRequest request, HttpServletResponse response) {
-    ModelAndView model = new ModelAndView();
     logger.info("circleInsert-start");
-    ArrayList<CodeBean> list = CodeService.Code_List();
+    ModelAndView model = new ModelAndView();
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("Kind", 1);
+    ArrayList<CodeBean> list = CodeService.Code_List(map);
     ArrayList<MenuBean> menu = MService.menu_List();
     ArrayList<MenuBean> Smenu = MService.menu_SubList();
+    
     model.addObject("menu", menu);
     model.addObject("Smenu", Smenu);
     model.setViewName("circle/circleInsert");

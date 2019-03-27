@@ -11,14 +11,14 @@
 		<ul class="navbar-nav animate side-nav">
 			<c:forEach items="${menu}" var="menu" varStatus="start">
 				<li class="nav-item">
-					<a class="nav-link text-white" id="navbarDropdown${start.index}" href="#" title=" ${menu.menu_nm} " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link text-white"  id="navbarDropdown${start.index}" href="#" title=" ${menu.menu_nm} " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<i class="${menu.menu_icon}"></i> ${menu.menu_nm} <i class="${menu.menu_icon} shortmenu animate" ></i>
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown${start.index}">
 						<div class="list-group">
 							<c:forEach items="${Smenu}" var="Smenu" varStatus="start">
 								<c:if test="${menu.menu_code1==Smenu.menu_code1}">
-									<a href="${Smenu.menu_href}" class="list-group-item list-group-item-action">${Smenu.menu_nm}</a>
+									<a href="${Smenu.menu_href}"  class="list-group-item list-group-item-action">${Smenu.menu_nm}</a>
 								</c:if>
 							</c:forEach>
 						</div>
@@ -104,9 +104,10 @@
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-white" href="http://localhost:8080/logout" data-toggle="tooltip" data-placement="bottom" title="로그아웃">
-							<i class="fas fa-sign-in-alt"></i> Logout
-						</a>
+						<a class="nav-link text-white" href="http://localhost:8080/circle/circleInsert" data-toggle="tooltip" data-placement="bottom" title="동아리개설"><i class="far fa-address-book"></i></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" href="http://localhost:8080/logout" data-toggle="tooltip" data-placement="bottom" title="로그아웃"><i class="fas fa-sign-in-alt"></i> </a>
 					</li>
 				</c:when>
 			</c:choose>
@@ -117,18 +118,16 @@
 </nav>
 <script>
   $(document).ready(function() {
+	  $('[data-toggle="tooltip"]').tooltip(); 
     function loading() {
       $("#fakeLoader").fakeLoader({
       timeToHide : 1000, //Time in milliseconds for fakeLoader disappear
       zIndex : 999, // Default zIndex
-      spinner : "spinner2",//Options: 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7' 
+      spinner : "spinner2", //Options: 'spinner1', 'spinner2', 'spinner3', 'spinner4', 'spinner5', 'spinner6', 'spinner7' 
       bgColor : "#dcdcdc" //Hex, RGB or RGBA colors
       });
     }
     
-
-    
-    $('[data-toggle="tooltip"]').tooltip();
     $(window).on('load', loading());
   });
 </script>

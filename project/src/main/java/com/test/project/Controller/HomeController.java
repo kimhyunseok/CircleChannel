@@ -15,11 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.test.project.Dto.CircleBean;
+import com.test.project.Dto.CircleJoinBean;
 import com.test.project.Dto.MenuBean;
 import com.test.project.Dto.pagingBean;
+import com.test.project.Service.CircleJoinService;
 import com.test.project.Service.CircleService;
 import com.test.project.Service.MenuService;
 import com.test.project.Service.UserService;
@@ -42,7 +45,10 @@ public class HomeController {
   UserService service;
   @Autowired
   private MenuService MService;
+  @Autowired
+  private CircleJoinService CJService;
   private pagingBean test;
+  private pagingBean page;
   
   /**
    * @메소드명 : index
@@ -54,6 +60,9 @@ public class HomeController {
   public ModelAndView index(String name, ModelAndView model) {
     ArrayList<MenuBean> menu = MService.menu_List();
     ArrayList<MenuBean> Smenu = MService.menu_SubList();
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    ArrayList<CircleBean> list = cService.circle_mainList(map);
+    model.addObject("list", list);
     model.addObject("menu", menu);
     model.addObject("Smenu", Smenu);
     model.setViewName("index");
@@ -106,7 +115,7 @@ public class HomeController {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.println("<script>alert('로그인해주세요.');</script>");
-        out.println("<script>location.replace('http://localhost:8080/circle/circleList?pageNum=1')</script>");
+        out.println("<script>location.replace('http://localhost:8080/main/login')</script>");
         out.flush();
         return model;
       } catch (IOException e) {
@@ -132,6 +141,55 @@ public class HomeController {
     // 1.비로그인시 검사 끝
     logger.info("================memberUpdate End=================");
     return model;
+  }
+  
+  /**
+   * @메소드명:AdminPage(HomeController.java)
+   * @작성자:김현석
+   * @작성일:2019. 3. 25.:오전 2:53:00
+   * @작성일:
+   */
+  @RequestMapping("/admin")
+  public ModelAndView AdminPage(String name, ModelAndView model) {
+    ArrayList<MenuBean> menu = MService.menu_List();
+    ArrayList<MenuBean> Smenu = MService.menu_SubList();
+    model.addObject("menu", menu);
+    model.addObject("Smenu", Smenu);
+    model.setViewName("admin/index");
+    return model;
+  }
+  
+  /**
+   * @메소드명:ApplyPeopleList(HomeController.java)
+   * @작성자:김현석
+   * @작성일:2019. 3. 25.:오전 2:52:52
+   * @작성일:
+   */
+  @RequestMapping("/main/ApplyPeopleList")
+  public ModelAndView ApplyPeopleList(ModelAndView model, HttpServletRequest req) {
+    logger.info("신청자리스트-시작");
+    int circle_no = Integer.parseInt(req.getParameter("circle_no"));
+    ArrayList<CircleJoinBean> list = CJService.CircleApply_list(circle_no);
+    model.addObject("list", list);
+    model.setViewName("main/ApplyPeopleList");
+    logger.info("신청자리스트-끝");
+    return model;
+  }
+  
+  @ResponseBody
+  
+  @RequestMapping("/main/ApplyPeopleCancel.ajax")
+  public HashMap<String, Object> loginChk(HttpServletRequest request) {
+    logger.info("================Login Start=================");
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    String num = request.getParameter("CircleJoin_no");
+    String circle_No = request.getParameter("circle_No");
+    map.put("CircleJoin_no", num);
+    map.put("circle_No", circle_No);
+    CJService.CircleJoin_Cancel(map);
+    logger.info(num);
+    logger.info("================Login End=================");
+    return map;
   }
 }
 

@@ -43,8 +43,8 @@ public class BoardService implements BoardDao {
    * @작성자 : KHS
    * @설명 :게시판 총갯수
    */
-  public int board_Cnt(String db) {
-    return mapper.board_Cnt(db);
+  public int board_Cnt(HashMap<String, Object> map) {
+    return mapper.board_Cnt(map);
   }
   
   /**

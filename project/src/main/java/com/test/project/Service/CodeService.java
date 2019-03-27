@@ -10,6 +10,7 @@
 package com.test.project.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,9 +34,9 @@ public class CodeService implements CodeDao {
   private CodeDao mapper;
   
   @Override
-  public ArrayList<CodeBean> Code_List() {
+  public ArrayList<CodeBean> Code_List(HashMap<String, Object> map) {
     // TODO Auto-generated method stub
-    return mapper.Code_List();
+    return mapper.Code_List(map);
   }
   
 }

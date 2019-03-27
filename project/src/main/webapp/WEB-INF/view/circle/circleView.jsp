@@ -14,8 +14,7 @@
 	href="http://localhost:8080/static.onoffmix.com/css/common/pc/common-pc.css"
 	rel="stylesheet">
 <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script
-	src="http://localhost:8080/static.onoffmix.com/js/pc/dist/common/jquery.noscroll.js"></script>
+
 <link
 	href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
 	rel="stylesheet">

@@ -25,10 +25,12 @@ import com.test.project.CommonMathod.CFileUploadMathod;
 import com.test.project.Dto.BRelplyBean;
 import com.test.project.Dto.BoardBean;
 import com.test.project.Dto.FileBean;
+import com.test.project.Dto.MenuBean;
 import com.test.project.Dto.pagingBean;
 import com.test.project.Service.BReplyService;
 import com.test.project.Service.BoardService;
 import com.test.project.Service.FileService;
+import com.test.project.Service.MenuService;
 
 /**
  * @패키지 com.test.project.Controller
@@ -59,6 +61,8 @@ public class BoardController {
   private pagingBean test;
   @Autowired
   private FileService Fservice;
+  @Autowired
+  private MenuService MService;
   
   /**
    * @메소드명 : eventList
@@ -71,11 +75,30 @@ public class BoardController {
     logger.info("이벤트목록-start");
     HashMap<String, Object> map = new HashMap<String, Object>();
     ArrayList<BoardBean> list;
-    int listCnt = BSevice.board_Cnt("tb_event_board");
-    // 전체리스트 개수
+    // 1.메뉴불러오기-시작
+    ArrayList<MenuBean> menu = MService.menu_List();
+    ArrayList<MenuBean> Smenu = MService.menu_SubList();
+    model.addObject("menu", menu);
+    model.addObject("Smenu", Smenu);
+    // 1.메뉴불러오기-끝
+    // 2.검색처리-시작
+    String order = "";
+    order = req.getParameter("order");
+    if (order != "") {
+      System.out.println("111111111111111111");
+      System.out.println(order);
+    }
+    String search = req.getParameter("form_search");
+    // 2.검색처리-끝
+    // 3.전체리스트 개수
+    map.put("order", order);
+    map.put("form_search", search);
+    map.put("db_table", "tb_event_board");
+    int listCnt = BSevice.board_Cnt(map);
+    // 2.전체리스트 개수
     int curNum = Integer.parseInt(req.getParameter("pageNum"));
     test = new pagingBean(listCnt, curNum);
-    map.put("db_table", "tb_event_board");
+    
     map.put("start", test.getStartIndex());
     list = BSevice.board_List(map);
     model.setViewName("board/event/eventList");
@@ -126,13 +149,13 @@ public class BoardController {
    */
   @ResponseBody
   @RequestMapping("board/event/eventReply_Ins.ajax")
-  public HashMap<String, Object> eventReply_Ins(HttpServletResponse rep, HttpServletRequest request, @RequestParam(value = "content") String content) {
+  public HashMap<String, Object> eventReply_Ins(HttpServletResponse rep, HttpServletRequest request, @RequestParam(value = "content") String reply_content) {
     logger.info("이벤트댓글-start");
     HashMap<String, Object> map = new HashMap<String, Object>();
     String board_no = request.getParameter("board_no");
     map.put("board_no", board_no);
     map.put("db_table", "tb_event_board_reply");
-    map.put("board_content", content);
+    map.put("board_content", reply_content);
     BReSevice.reply_Insert(map);
     
     // map.put("content", "succes");
@@ -148,17 +171,18 @@ public class BoardController {
    */
   @ResponseBody
   @RequestMapping("board/event/eventReReply_Ins.ajax")
-  public HashMap<String, Object> eventReReply_Ins(HttpServletResponse rep, HttpServletRequest request, BRelplyBean bean) {
+  public HashMap<String, Object> eventReReply_Ins(HttpServletResponse rep, HttpServletRequest request) {
     logger.info("이벤트댓글-start");
     HashMap<String, Object> map = new HashMap<String, Object>();
     String board_no = request.getParameter("board_no");
-    String board_level = request.getParameter("board_level");
+    String board_level = request.getParameter("reply_level");
+    String reply_content = request.getParameter("reply_content");
     String reply_no = request.getParameter("reply_no");
     
-    map.put("board_no", bean.getBoard_no());
-    map.put("reply_no", bean.getReply_no());
+    map.put("board_no", board_no);
+    map.put("reply_no", reply_no);
     map.put("db_table", "tb_event_board_reply");
-    map.put("reply_content", bean.getReply_content());
+    map.put("reply_content", reply_content);
     int max = BReSevice.reply_max(map);
     map.put("reply_level", BReSevice.reply_max(map));
     BReSevice.Rereply_Insert(map);
