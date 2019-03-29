@@ -21,4 +21,11 @@ public interface MenuDao {
   ArrayList<MenuBean> menu_SubList();
   
   String menu_Title(HashMap<String, Object> map);
+  
+  void Menu_SubInsertOk(HashMap<String, Object> map);
+  
+  void Menu_Delete(HashMap<String, Object> map);
+  
+  void Menu_Insert(ArrayList<HashMap<String, Object>> map);
+  
 }

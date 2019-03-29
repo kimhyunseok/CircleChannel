@@ -5,7 +5,7 @@
 		SELECT
 			COUNT(user_id)
 		FROM TB_USER
-			WHERE USER_ID LIKE #{param}
+			WHERE USER_ID LIKE #{param} AND USER_STATE='1'
 	</select>
 	<select id="LoginChk" parameterType="com.test.project.Dto.UserBean" resultType="int">
 		SELECT
@@ -26,7 +26,8 @@
             `USER_PHONE`,
             `USER_ADDR1`,
             `USER_ADDR2`,  
-            `USER_POST`       
+            `USER_POST`,
+            `USER_STATE`       
 		)
 		VALUES
 		(
@@ -38,10 +39,30 @@
             #{user_phone},
             #{user_addr1},
             #{user_addr2},
-            #{user_post} 
+            #{user_post},
+            1
 		);
 	</insert>
 	<select id="SelectUserInfo" parameterType="String" resultType="com.test.project.Dto.UserBean">
+		SELECT
+			user_no,
+			user_id,
+			user_nm,
+			user_pw,
+			user_email_1,
+			user_email_2,
+            user_addr1,
+            user_addr2,
+            user_post, 
+            user_phone,
+            user_in_date
+		FROM
+			TB_USER
+		WHERE
+			user_id = #{param}
+	</select>
+	
+	<select id="User_List" parameterType="Hashmap" resultType="com.test.project.Dto.UserBean">
 		SELECT
 			user_id,
 			user_nm,
@@ -51,11 +72,12 @@
             user_addr1,
             user_addr2,
             user_post, 
-            user_phone
+            user_phone,
+            user_in_date
 		FROM
-			TB_USER
-		WHERE
-			user_id = #{param}
+			TB_USER 
+		WHERE 
+			USER_STATE='1';
 	</select>
 	<update id="UserUpdate" parameterType="com.test.project.Dto.UserBean" >
 		UPDATE tb_user
@@ -70,4 +92,12 @@
             `user_post`    = #{user_post}
 		WHERE `user_id` = #{user_id} ;
 	</update>
+	
+	<update id="User_Delete" parameterType="hashmap" >
+		UPDATE tb_user
+		SET
+			`user_state`   = 2
+		WHERE `user_id` = #{user_id} ;
+	</update>
+	
 </mapper>

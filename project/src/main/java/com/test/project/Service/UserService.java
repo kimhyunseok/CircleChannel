@@ -1,5 +1,8 @@
 package com.test.project.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,4 +44,11 @@ public class UserService implements UserDao {
     return mapper.SelectUserInfo(user_id);
   }
   
+  public ArrayList<UserBean> User_List(HashMap<String, Object> map) {
+    return mapper.User_List(map);
+  }
+  
+  public void User_Delete(HashMap<String, Object> map) {
+    mapper.User_Delete(map);
+  }
 }

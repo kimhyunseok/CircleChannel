@@ -51,4 +51,22 @@ public class MenuService implements MenuDao {
     return mapper.menu_Title(map);
   }
   
+  @Override
+  public void Menu_SubInsertOk(HashMap<String, Object> map) {
+    // TODO Auto-generated method stub
+    mapper.Menu_SubInsertOk(map);
+  }
+  
+  @Override
+  public void Menu_Delete(HashMap<String, Object> map) {
+    // TODO Auto-generated method stub
+    mapper.Menu_Delete(map);
+  }
+  
+  @Override
+  public void Menu_Insert(ArrayList<HashMap<String, Object>> map) {
+    // TODO Auto-generated method stub
+    mapper.Menu_Insert(map);
+  }
+  
 }

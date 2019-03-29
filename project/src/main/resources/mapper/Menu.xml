@@ -30,4 +30,52 @@
 	FROM `tb_menu`
 	WHERE menu_code1 = #{Kind1} and menu_code2 = #{Kind2} 
   </select>
+  <insert id="Menu_SubInsertOk" parameterType="Hashmap">
+  INSERT INTO 
+  tb_menu(
+	menu_nm,
+    menu_code1, 
+    menu_code2,
+    `menu_icon`
+   )
+  VALUES(
+	  #{bean.menu_nm}, 
+	  #{bean.menu_code1}, 
+	  fn_menuMax(#{bean.menu_code1}),
+	  ''
+  );
+  </insert>
+<delete id="Menu_Delete" parameterType="Hashmap">
+	DELETE FROM tb_menu
+	WHERE 
+	<if test="bean.menu_code1 !='empty' ">
+	 menu_code1=#{bean.menu_code1}
+	</if>
+	<if test="bean.menu_code1 =='empty'">
+	 menu_no=${bean.menu_no};
+	</if>
+</delete>
+<insert id="Menu_Insert" parameterType="Hashmap"
+	       >
+		INSERT INTO `tb_menu`
+		(
+            `menu_nm`,
+            `menu_code1`,
+            `menu_code2`,
+            `menu_icon`,
+            `menu_href`
+      
+		)
+		VALUES
+      <foreach collection="list" item="item" separator=" , ">
+		(
+			#{item.menu_nm},    
+			#{item.menu_code1},          
+			'0',      
+			#{item.menu_icon},         
+			'test'
+    	)
+  	</foreach>
+  	ON DUPLICATE KEY UPDATE menu_nm = values(menu_nm) ,menu_code1=values(menu_code1),menu_icon=values(menu_icon)
+  </insert>
 </mapper>
