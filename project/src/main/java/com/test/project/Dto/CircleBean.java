@@ -43,5 +43,4 @@ public class CircleBean {
   private String user_email_1;
   private String user_email_2;
   private String circle_Summary;
-  
 }

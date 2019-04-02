@@ -53,9 +53,10 @@
 		SELECT
 		count(circle_No)as circle_No
 		FROM tb_circle
-
-		WHERE circle_Kind = concat(#{Kind1},','#{Kind1})
-
+		WHERE 1=1
+		<if test="Kind1 != '' and Kind1 != null">
+		    AND circle_Kind = concat(#{Kind1},','#{Kind1})
+		</if>
 		<if test="form_search != '' and form_search != null">
 			and circle_Nm like '%${form_search}%'
 		</if>
@@ -141,9 +142,12 @@
 		FROM tb_circle a
 		INNER JOIN tb_file b
 		ON a.file_no = b.file_no
-		WHERE circle_Kind =
-		concat(#{Kind1},',',${Kind2})
-		<if test="form_search != ''">
+		
+		WHERE 1=1
+		<if test="Kind1 != '' and Kind1 != null">
+		and circle_Kind = concat(#{Kind1},',',${Kind2})
+		</if>
+		<if test="form_search != '' and form_search != null">
 			and circle_Nm like '%${form_search}%'
 		</if>
 		<if test="code != '' and code != null">
@@ -184,7 +188,10 @@
 		<if test="date != '' and date !=null ">
 		 #{date} between circle_Date1 and circle_Date2
 		</if>
-		ORDER BY circle_No ASC LIMIT ${start}, 12
+		ORDER BY circle_No ASC 
+		<if test="List_chk != 'All'">
+		LIMIT ${start}, 12
+		</if>
 		) A
 
 	</select>

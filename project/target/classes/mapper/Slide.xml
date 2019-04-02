@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.project.Dao.SlideDao">
+
+
+	<select id="Slide_List" parameterType="Hashmap"
+		resultType="com.test.project.Dto.SlideBean">
+		SELECT
+		a.slide_no,
+		b.circle_nm,
+		b.circle_no,
+		concat("http://localhost:8080/admin/SlideList", concat("?Kind1=",SUBSTRING_INDEX(b.circle_kind, ',',
+		1)),concat('&amp;Kind2=',SUBSTRING_INDEX(b.circle_kind, ',', -1)) )as
+		circle_href
+		FROM project.tb_slide A INNER JOIN tb_circle B ON A.circle_no=b.circle_no;
+	</select>
+	<insert id="Slide_Insert">
+		INSERT INTO `tb_slide`
+		(
+		`circle_no`,
+		`slide_in_date`
+		)
+		VALUES
+		<foreach collection="list" item="item" separator=" , ">
+			(
+			#{item.circle_no},
+			now()
+			)
+		</foreach>
+		ON DUPLICATE KEY UPDATE circle_no = values(circle_no)
+	</insert>
+	<delete id="Slide_Delete" parameterType="Hashmap">
+	DELETE FROM `tb_slide` WHERE slide_no=#{slide_No}
+	
+	</delete>
+
+
+</mapper>

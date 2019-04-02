@@ -12,7 +12,7 @@
           <a class="dropdown-item" href="http://localhost:8080/admin/UserList">회원관리</a>
           <a class="dropdown-item" href="http://localhost:8080/admin/MenuList">메뉴관리</a>
           <a class="dropdown-item" href="forgot-password.html">관리자메뉴관리</a>
-           <a class="dropdown-item" href="forgot-password.html">메인슬라이드관리</a>
+           <a class="dropdown-item" href="http://localhost:8080/admin/SlideList">메인슬라이드관리</a>
           <div class="dropdown-divider"></div>
           <h6 class="dropdown-header">게시판관리</h6>
           <a class="dropdown-item" href="404.html">동아리관리</a>
