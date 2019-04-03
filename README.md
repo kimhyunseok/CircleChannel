@@ -1,7 +1,5 @@
 # CircleChannel
 
-# skProject
-
 # Introduction
 자바웹개발자를 준비하는 개발자입니다 주력 언어로 Java를 하고, 
 외에는 Spring,html/css,jquery,SQL등을 할 수 있습니다. 
