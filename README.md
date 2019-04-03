@@ -30,6 +30,10 @@ curd,function,조인,서브쿼리등 기본적인 SQL공부했습니다.
 # 컴맹pc
 <img src="https://user-images.githubusercontent.com/22089968/55454881-75fb7e80-561c-11e9-8491-914fc2c572cc.PNG" width="90%"></img>
 <a href="https://github.com/kimhyunseok/CircleChannel/files/3039787/_COMMAENG_PC.pdf">김현석_COMMAENG_PC.pdf</a>
+
 # 동아리채널
 <img style="-webkit-user-select: none;" src="https://user-images.githubusercontent.com/22089968/55457608-66346800-5625-11e9-9bab-5eec60fcc4d1.PNG">
 <a href="https://github.com/kimhyunseok/CircleChannel/files/3039780/default.pptx">동아리채널 프로젝트.pptx</a>
+
+# 동아리채널
+<a href="https://github.com/kimhyunseok/skProject">SK고용디딤돌-[항공리뷰]</a>
