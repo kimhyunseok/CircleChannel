@@ -32,3 +32,4 @@ curd,function,조인,서브쿼리등 기본적인 SQL공부했습니다.
 
 # 동아리채널
 <img style="-webkit-user-select: none;" src="https://user-images.githubusercontent.com/22089968/55457608-66346800-5625-11e9-9bab-5eec60fcc4d1.PNG">
+<a href="https://github.com/kimhyunseok/CircleChannel/files/3039780/default.pptx">동아리채널 프로젝트.pptx</a>
